@@ -1,6 +1,20 @@
 ## Global Variables
-heartAttack.MortalityRate = "Lower.Mortality.Estimate...Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack"
-pneumonia.MortalityRate = "Lower.Mortality.Estimate...Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"  
+heartAttack.MortalityRate <- "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack" 
+pneumonia.MortalityRate <-  "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"  
+heartFailure.MortalityRate <- "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure"  
+
+
+check.arg.outcome <- function(outcome){
+  if (outcome == "heart attack"){
+    return(heartAttack.MortalityRate)
+  }else if (outcome == "pneumonia"){
+    return(pneumonia.MortalityRate)
+  }else if (outcome == "heart failure"){
+    return(heartFailure.MortalityRate) 
+  }else{
+    stop("invalid outcome")
+  }
+}
 
 ## Find hospital in specified state with lowest mortality 
 best <- function(state,outcome){
@@ -10,13 +24,7 @@ best <- function(state,outcome){
   
   ## Check input arguments 
   # Check that outcome is valid
-  if (outcome == "heart attack"){
-    outcome.col <- heartAttack.MortalityRate
-  }else if (outcome == "pneumonia"){
-    outcome.col <- pneumonia.MortalityRate
-  }else{
-    stop("invalid outcome")
-  }
+  outcome.col <- check.arg.outcome(outcome)
 
   # Check that state is in csv file
   states <- unique(csvDF["State"])
@@ -54,13 +62,7 @@ rankhospital <- function(state,outcome,num){
   
   ## Check input arguments 
   # Check that outcome is valid
-  if (outcome == "heart attack"){
-    outcome.col <- heartAttack.MortalityRate
-  }else if (outcome == "pneumonia"){
-    outcome.col <- pneumonia.MortalityRate
-  }else{
-    stop("invalid outcome")
-  }
+  outcome.col <- check.arg.outcome(outcome)
   
   # Check that state is in csv file
   states <- unique(csvDF["State"])
@@ -76,6 +78,59 @@ rankhospital <- function(state,outcome,num){
   # filter out non-relevant states
   keep.state <- csvDF["State"] == state
   csvDF <- csvDF[keep.state,]
-  csvDF <- csvDF[order(csvDF[outcome.col]),]
-  return(csvDF)
+  orderedDF <- csvDF[order(csvDF[outcome.col],rev(csvDF["Hospital.Name"]), na.last = NA),]
+  
+  if (class(num) != "numeric"){
+    if (num == "best"){
+      num <- 1
+    }else if (num == "worst"){
+      num <- nrow(orderedDF)
+    }
+  }
+  
+  row.count <- nrow(orderedDF)
+  if (row.count<num){
+    return(NA)
+  }
+  
+  orderedDF$Rank <- 1:row.count
+  return(orderedDF[(orderedDF$Rank == num),"Hospital.Name"])
 }
+
+rankall <- function(outcome, num = "best") {
+  ## Read outcome data
+  csvDF <- read.csv("Data/outcome-of-care-measures.csv", colClasses = "character")
+  
+  ## Check input arguments 
+  # Check that outcome is valid
+  outcome.col <- check.arg.outcome(outcome)
+  
+  ## For each state, find the hospital of the given rank
+  ## Return hospital name in that state with the given rank ## 30-day death rate
+  # convert outcome row
+  csvDF <- csvDF[c("Hospital.Name","State",outcome.col)]
+  csvDF[outcome.col] <- as.numeric(csvDF[,outcome.col]) 
+  orderedDF <- csvDF[order(csvDF[outcome.col],csvDF["Hospital.Name"], na.last = NA),]
+  
+  #x <- split(orderedDF,orderedDF$State)
+  #return(x$NV)
+  
+  ranks <- lapply(split(orderedDF,orderedDF$State),function(x){
+    
+    rank <- num  
+    if (class(num) == "character"){
+      if (num == "best"){
+        rank <- 1
+      }else if (num == "worst"){
+        rank <- dim(x)[1]
+      }
+    }
+    x[rank,"Hospital.Name"]#["Hospital.Name"]
+  })
+  
+  output <- data.frame(hospital=unlist(x,use.names = FALSE),state=names(ranks),row.names=names(ranks))
+  
+  return(output)
+
+}
+
