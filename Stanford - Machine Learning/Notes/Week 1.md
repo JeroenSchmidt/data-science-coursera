@@ -236,7 +236,7 @@ We should adjust our parameter α to ensure that the gradient descent algorithm 
 
 ##### Convergence
 
-As the gradient term gets closer to 
+As the gradient term gets closer to the local optimal point, its value get closer to 0, then the gradient descent term as a whole gets smaller for every iteration. 
 
 ## Linear Algebra Review
 
