@@ -106,20 +106,20 @@ $$
 
 ![1496577282966](Images/Week1/1496577282966.png)
 
-#### **How do we determine the parameters?**
+#### **Formalized Cost function for Linear Regression**
+
+*How do we determine the parameters?*
 
 Choose $\theta_0,\theta_1$ so that $h$ is close to $y$ for our training example $(x,y)$
 
-##### Formalized Cost function for Linear Regression
-
-###### *Squared Error Function / Mean squared error:*
+##### *Squared Error Function / Mean squared error:*
 
 This is the most common function used for regression problems but there are others.
 $$
 J(\theta_0,\theta_1) =  \frac{1}{2m} \sum^m_{i=1} \left(h_\theta x^{(i)} - y ^{(i)}\right)^2 \\
 $$
 
-###### *Minimize the Square Error Function*
+##### *Minimize the Square Error Function*
 
 $$
 min_{\theta_0,\theta_1} J(\theta_0,\theta_1)
@@ -238,5 +238,27 @@ We should adjust our parameter α to ensure that the gradient descent algorithm 
 
 As the gradient term gets closer to the local optimal point, its value get closer to 0, then the gradient descent term as a whole gets smaller for every iteration. 
 
-## Linear Algebra Review
+### Gradient Descent for Linear Regression
+
+![1496599686273](Images/Week1/1496599686273.png)
+
+Finding the partial derivative terms:
+
+![1496599776158](Images/Week1/1496599776158.png)
+
+***NOTE:*** Linear regression problems are *convex function*s i.e. it has one minimum -> we don't have to worry about local / global min.
+
+![1496600400077](Images/Week1/1496600400077.png)
+
+##### ***Definition:*** Batch
+
+Each step of gradient descent uses all the training examples
+i.e. the above algorithm is also know as *batch gradient descent*
+
+**NOTE**
+
+* Normal Equations method: method to numerically find the minimum solution
+* Gradient Descent Method scales better for larger data sets
+
+
 
