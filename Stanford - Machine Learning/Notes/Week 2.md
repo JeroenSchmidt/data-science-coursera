@@ -89,7 +89,7 @@ $$
 
 ==NOTE== do not apply to $x_0=1$
 
-*Method:*
+*Method:* - This method will normalize and feature scale.
 $$
 x_i := \dfrac{x_i - \mu_i}{s_i} \\
 \mu_i - \text{average of all values of feature i}\\
@@ -155,15 +155,43 @@ eg if $x_1$ has range 1 - 1000 then range of $x^2_1$ becomes 1 - 1000000 and tha
 
 ==NOTE:== We will look algorithms later that can determine what kind of polynomial to use
 
-## Computing Parameters Analytically
-
-### Normal Equation
+## ***Normal Equation*** - Computing Parameters Analytically
 
 > Method for solving for $\theta$ analytically 
->
-> Feature scaling is not needed
+
+==NOTE== Feature scaling is not needed
+
+##### ***Formula:*** Normal Equation 
+
+$$
+\theta = (X^T X)^{-1}X^T y
+$$
+
+Where $\theta$ is a vector containing the parameter values
+
+##### **Terminology:** 
+
+* $X$ - design matrix
+
+#### Example:
+
+![1496950873368](Images/Week2/1496950873368.png)
+
+#### Octave Code
+
+```octave
+pinv(x'*x)*x'*y
+```
 
 ### Intuition
+
+Here we consider the **1D** case. essentially we find the 1st derivative of the cost function and equate it to zero - as is done to find the optimal solution of the curve. 
+
+![1496950996923](Images/Week2/1496950996923.png)
+
+$n$ dimensional extension
+
+![1496951013017](Images/Week2/1496951013017.png)
 
 ### Pros & Cons
 
@@ -173,3 +201,20 @@ eg if $x_1$ has range 1 - 1000 then range of $x^2_1$ becomes 1 - 1000000 and tha
 | Needs many iterations        | No need to iterate                       |
 | $O (kn^2)$                   | $O (n^3)$, need to calculate inverse of $X^TX$ |
 | Works well when $n$ is large | Slow if $n$ is very large                |
+
+### Recap:
+
+Matrix identity 
+
+![1496951264617](Images/Week2/1496951264617.png)
+
+### Non-Inevitability
+
+> What if $X^TX$ is non0invertible?
+
+==NOTE== Octave already considers this situation with `pinv` 
+
+#### Common Causes
+
+- Redundant features, where two features are very closely related (i.e. they are linearly dependent)
+- Too many features (e.g. m ≤ n). In this case, delete some features or use "regularization" (to be explained in a later lesson).
