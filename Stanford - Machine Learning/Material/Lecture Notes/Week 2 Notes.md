@@ -126,7 +126,7 @@ Your answer should be rounded to exactly two decimal places. Use a '.' for the d
 
 # Gradient Descent Tips
 
-**Debugging gradient descent.** Make a plot with *number of iterations* on the x-axis. Now plot the cost function, J(θ) over the number of iterations of gradient descent. If J(θ) ever increases, then you probably need to decrease α.
+**Debugging gradient descent.** Make a plot with *number of iterations* on the x-axis. Now plot the cost function, $J(θ)$ over the number of iterations of gradient descent. If $J(θ)$ ever increases, then you probably need to decrease $α$.
 
 **Automatic convergence test.** Declare convergence if J(θ) decreases by less than E in one iteration, where E is some small value such as 10−3. However in practice it's difficult to choose this threshold value.
 
@@ -154,7 +154,7 @@ Note that at 2:52 and through 6:22 in the "Features and Polynomial Regression" v
 
 One important thing to keep in mind is, if you choose your features this way then feature scaling becomes very important.
 
-eg. if x1 has range 1 - 1000 then range of x21 becomes 1 - 1000000 and that of x31 becomes 1 - 1000000000.
+eg. if $x_1$ has range 1 - 1000 then range of x21 becomes 1 - 1000000 and that of x31 becomes 1 - 1000000000.
 
 # Normal Equation
 
