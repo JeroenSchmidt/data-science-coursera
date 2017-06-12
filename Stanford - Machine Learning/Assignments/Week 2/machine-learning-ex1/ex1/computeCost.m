@@ -13,7 +13,7 @@ J = 0;
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
 
-h = X * theta %note that theta has been defined as a nx1 vector already
+h = X * theta; %note that theta has been defined as a nx1 vector already
 
 sumation = sum((h - y).^2);
 J = (1/(2*m))*sumation;
