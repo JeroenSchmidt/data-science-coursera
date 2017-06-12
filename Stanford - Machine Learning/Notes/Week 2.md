@@ -55,7 +55,14 @@ J(\theta) = \frac{1}{2m}\sum_{i=1}^{m}(\theta^T x^{(i)} - y^{(i)})^2 \\
 J(\theta) = \frac{1}{2m}\sum_{i=1}^{m}\left(\left(\sum_{j=0}^{n}\theta_j x^{(i)}_j\right) - y^{(i)}\right)^2
 $$
 
-##### Gradient Descent Algorithm 
+#### ***Vectorised:*** Gradient Descent
+
+ 
+$$
+J(\theta) = \dfrac {1}{2m} (X\theta - \vec{y})^{T} (X\theta - \vec{y})
+$$
+
+##### ***Algorithm:*** Gradient Descent 
 
 *Repeat until convergence:*
 $$
@@ -126,6 +133,12 @@ Graph A,B converge to an optimum of the cost function, but graph B does so much 
 Observe what the cost function plot looks like when overshooting occurs:
 
 ![1496839043713](Images/Week2/1496839043713.png)
+
+#### ***Vectorized:*** Gradient Descent 
+
+$$
+\theta := \theta - \frac{\alpha}{m} X^{T} (X\theta - \vec{y})
+$$
 
 ## Features
 

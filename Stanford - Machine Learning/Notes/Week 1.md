@@ -119,6 +119,12 @@ $$
 J(\theta_0,\theta_1) =  \frac{1}{2m} \sum^m_{i=1} \left(h_\theta x^{(i)} - y ^{(i)}\right)^2 \\
 $$
 
+##### ***Vectorised*** - Cost Function
+
+$$
+J(\theta) = \dfrac {1}{2m} (X\theta - \vec{y})^{T} (X\theta - \vec{y})
+$$
+
 ##### *Minimize the Square Error Function*
 
 $$

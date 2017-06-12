@@ -257,13 +257,16 @@ $$
 ##### ***Vectorized*** - Updating of Gradient Descent
 
 $$
-\theta := \theta - \frac{\alpha}{m} X^{T} (g(X \theta ) - \vec{y})
+\theta := \theta - \alpha\frac{1}{m}\sum_{i=1}^{m}[(h_\theta(x^{(i)}) - y^{(i)}) \cdot x^{(i)}]
 $$
 
 OR
 $$
-\theta := \theta - \alpha\frac{1}{m}\sum_{i=1}^{m}[(h_\theta(x^{(i)}) - y^{(i)}) \cdot x^{(i)}]
+\theta := \theta - \frac{\alpha}{m} X^{T} (g(X \theta ) - \vec{y})
 $$
+
+### Advanced Optimization 
+
 
 
 ## Multiclass Classification
