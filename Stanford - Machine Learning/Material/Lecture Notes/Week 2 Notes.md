@@ -14,7 +14,7 @@ Now define the multivariable form of the hypothesis function as follows, accommo
 $$
 h_\theta (x) = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + \theta_3 x_3 + \cdots + \theta_n x_n
 $$
-In order to develop intuition about this function, we can think about θ0 as the basic price of a house, θ1 as the price per square meter, θ2 as the price per floor, etc. x1 will be the number of square meters in the house, x2 the number of floors, etc.
+In order to develop intuition about this function, we can think about $θ_0$ as the basic price of a house, $θ_1$ as the price per square meter, $θ_2$ as the price per floor, etc. $x_1$ will be the number of square meters in the house, $x_2$ the number of floors, etc.
 
 Using the definition of matrix multiplication, our multivariable hypothesis function can be concisely represented as:
 $$
@@ -22,9 +22,9 @@ $$
 $$
 This is a vectorization of our hypothesis function for one training example; see the lessons on vectorization to learn more.
 
-Remark: Note that for convenience reasons in this course Mr. Ng assumes x(i)0=1 for (i∈1,…,m)
+Remark: Note that for convenience reasons in this course Mr. Ng assumes $x_0(i)=1$ for $(i∈1,…,m)$
 
-[**Note**: So that we can do matrix operations with theta and x, we will set x(i)0 = 1, for all values of i. This makes the two vectors 'theta' and x(i)match each other element-wise (that is, have the same number of elements: n+1).]
+[**Note**: So that we can do matrix operations with theta and x, we will set $x^{(i)}_0 = 1$, for all values of $i$. This makes the two vectors $\theta$ and $x_{(i)}$ match each other element-wise (that is, have the same number of elements: n+1).]
 
 The training examples are stored in X row-wise, like such:
 $$
@@ -85,9 +85,9 @@ $$
 $$
 Sometimes, the summation of the product of two terms can be expressed as the product of two vectors.
 
-Here, x(i)j, for i = 1,...,m, represents the m elements of the j-th column, xj→ , of the training set X.
+Here, $x^{(i)}_j$ for $i = 1,...,m$, represents the m elements of the j-th column, $\vec{x}_j$ , of the training set X.
 
-The other term $(h_θ(x(i))−y(i))$ is the vector of the deviations between the predictions $h_θ(x(i))$ and the true values y(i). Re-writing $\frac{∂J(θ)}{∂θj}$, we have:
+The other term $(h_θ(x^{(i)})−y^{(i)})$ is the vector of the deviations between the predictions $h_θ(x(i))$ and the true values $y^{(i)}$. Re-writing $\frac{∂J(θ)}{∂θj}$, we have:
 $$
 \begin{align*}\; &\frac{\partial J(\theta)}{\partial \theta_j} &=& \frac1m  \vec{x_j}^{T} (X\theta - \vec{y}) \newline\newline\newline\; &\nabla J(\theta) & = & \frac 1m X^{T} (X\theta - \vec{y}) \newline\end{align*}
 $$
@@ -102,15 +102,15 @@ We can speed up gradient descent by having each of our input values in roughly t
 
 The way to prevent this is to modify the ranges of our input variables so that they are all roughly the same. Ideally:
 
-−1 ≤ x(i) ≤ 1
+−1 ≤ $x_{(i)}$ ≤ 1
 
 or
 
-−0.5 ≤ x(i) ≤ 0.5
+−0.5 ≤ $x_{(i)}$ ≤ 0.5
 
 These aren't exact requirements; we are only trying to speed things up. The goal is to get all input variables into roughly one of these ranges, give or take a few.
 
-Two techniques to help with this are **feature scaling** and **mean normalization**. Feature scaling involves dividing the input values by the range (i.e. the maximum value minus the minimum value) of the input variable, resulting in a new range of just 1. Mean normalization involves subtracting the average value for an input variable from the values for that input variable, resulting in a new average value for the input variable of just zero. To implement both of these techniques, adjust your input values as shown in this formula:
+Two techniques to help with this are **feature scaling** and **mean normalization**. Feature scaling involves dividing the input values by the range (i.e. the maximum value minus the minimum value) of the input variable, resulting in a new range of just 1. *Mean normalization* involves subtracting the average value for an input variable from the values for that input variable, resulting in a new average value for the input variable of just zero. To implement both of these techniques, adjust your input values as shown in this formula:
 
 $x_i:=\frac{x_i−μ_i}{s_i}$
 
@@ -136,7 +136,7 @@ It has been proven that if learning rate α is sufficiently small, then J(θ) wi
 
 We can improve our features and the form of our hypothesis function in a couple different ways.
 
-We can **combine** multiple features into one. For example, we can combine x1 and x2 into a new feature x3 by taking x1⋅x2.
+We can **combine** multiple features into one. For example, we can combine x1 and x2 into a new feature x3 by taking $x_1⋅x_2$.
 
 ### **Polynomial Regression**
 
@@ -144,21 +144,21 @@ Our hypothesis function need not be linear (a straight line) if that does not fi
 
 We can **change the behavior or curve** of our hypothesis function by making it a quadratic, cubic or square root function (or any other form).
 
-For example, if our hypothesis function is hθ(x)=θ0+θ1x1 then we can create additional features based on x1, to get the quadratic function hθ(x)=θ0+θ1x1+θ2x21 or the cubic function hθ(x)=θ0+θ1x1+θ2x21+θ3x31
+For example, if our hypothesis function is $h_θ(x)=θ_0+θ_1x_1$ then we can create additional features based on $x_1$, to get the quadratic function $h_θ(x)=θ_0+θ_1x_1+θ_2x^2_1$ or the cubic function $h_θ(x)=θ_0+θ_1x_1+θ_2x^2_1+θ_3x^3_1$
 
-In the cubic version, we have created new features x2 and x3 where x2=x21 and x3=x31.
+In the cubic version, we have created new features $x_2$ and $x_3$ where $x_2=x^2_1$ and $x_3=x^3_1$.
 
-To make it a square root function, we could do: hθ(x)=θ0+θ1x1+θ2x1−−√
+To make it a square root function, we could do: $h_θ(x)=θ_0+θ_1x_1+θ_2\sqrt{x_1}$
 
-Note that at 2:52 and through 6:22 in the "Features and Polynomial Regression" video, the curve that Prof Ng discusses about "doesn't ever come back down" is in reference to the hypothesis function that uses the sqrt() function (shown by the solid purple line), not the one that uses size2(shown with the dotted blue line). The quadratic form of the hypothesis function would have the shape shown with the blue dotted line if θ2 was negative.
+Note that at 2:52 and through 6:22 in the "Features and Polynomial Regression" video, the curve that Prof Ng discusses about "doesn't ever come back down" is in reference to the hypothesis function that uses the sqrt() function (shown by the solid purple line), not the one that uses size2(shown with the dotted blue line). The quadratic form of the hypothesis function would have the shape shown with the blue dotted line if $θ_2$ was negative.
 
 One important thing to keep in mind is, if you choose your features this way then feature scaling becomes very important.
 
-eg. if $x_1$ has range 1 - 1000 then range of x21 becomes 1 - 1000000 and that of x31 becomes 1 - 1000000000.
+eg. if $x_1$ has range 1 - 1000 then range of $x^2_1$ becomes 1 - 1000000 and that of $x^3_1$ becomes 1 - 1000000000.
 
 # Normal Equation
 
-The "Normal Equation" is a method of finding the optimum theta **without iteration.**
+The "Normal Equation" is a method of finding the optimum $\theta$ **without iteration.**
 
 $θ=(X^TX)^{−1}X^Ty$
 

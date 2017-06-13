@@ -157,20 +157,19 @@ $\frac{∂}{∂θ_j}J(θ)$
 
 We can write a single function that returns both of these:
 
-```
+```octave
 function [jVal, gradient] = costFunction(theta)
   jVal = [...code to compute J(theta)...];
-  gradient = [...code to compute derivative of J(theta)...];
+  gradient = [...code to compute derivative(s) of J(theta)...];
 end
 ```
 
-Then we can use octave's "fminunc()" optimization algorithm along with the "optimset()" function that creates an object containing the options we want to send to "fminunc()". (Note: the value for MaxIter should be an integer, not a character string - errata in the video at 7:30)
+Then we can use octave's "fminunc()" optimization algorithm along with the "optimset()" function that creates an object containing the options we want to send to "fminunc()". (Note: the value for `MaxIter` should be an integer, not a character string - errata in the video at 7:30)
 
-```
+```octave
 options = optimset('GradObj', 'on', 'MaxIter', 100);
-      initialTheta = zeros(2,1);
-      [optTheta, functionVal, exitFlag] = fminunc(@costFunction, initialTheta, 
-        options);
+initialTheta = zeros(2,1);
+[optTheta, functionVal, exitFlag] = fminunc(@costFunction, initialTheta, options);
 ```
 
 We give to the function "fminunc()" our cost function, our initial vector of theta values, and the "options" object that we created beforehand.
@@ -191,9 +190,13 @@ We are basically choosing one class and then lumping all the others into a singl
 
 Regularization is designed to address the problem of overfitting.
 
-High bias or underfitting is when the form of our hypothesis function h maps poorly to the trend of the data. It is usually caused by a function that is too simple or uses too few features. eg. if we take $h_θ(x)=θ_0+θ_1x_1+θ_2x_2$ then we are making an initial assumption that a linear model will fit the training data well and will be able to generalize but that may not be the case.
+***High bias or underfitting*** 
 
-At the other extreme, overfitting or high variance is caused by a hypothesis function that fits the available data but does not generalize well to predict new data. It is usually caused by a complicated function that creates a lot of unnecessary curves and angles unrelated to the data.
+>  When the form of our hypothesis function h maps poorly to the trend of the data. It is usually caused by a function that is too simple or uses too few features. eg. if we take $h_θ(x)=θ_0+θ_1x_1+θ_2x_2$ then we are making an initial assumption that a linear model will fit the training data well and will be able to generalize but that may not be the case.
+
+***overfitting*** or high variance 
+
+>  is caused by a hypothesis function that fits the available data but does not generalize well to predict new data. It is usually caused by a complicated function that creates a lot of unnecessary curves and angles unrelated to the data.
 
 This terminology is applied to both linear and logistic regression. There are two main options to address the issue of overfitting:
 

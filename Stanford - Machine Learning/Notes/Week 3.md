@@ -168,7 +168,7 @@ $$
 
 But recall that the hypothesis for logistic regression is: (non-linear)
 $$
-h_\theta(x)=\frac{1}{1+e^{\theta^Tx}}
+h_\theta(x)=\frac{1}{1+e^{-\theta^Tx}}
 $$
 This non-linearity will produce a "non-convec" cost function when put into the cost function $J(\theta)$
 
@@ -267,8 +267,137 @@ $$
 
 ### Advanced Optimization 
 
+Example of more advanced optimization algorithms
+
+* Conjugate gradient
+* BFGS
+* L-BFGS
+
+| Advantages                         | Disadvantages |
+| ---------------------------------- | ------------- |
+| No need to manually pick $\alpha$  | More Complex  |
+| Often faster then gradient descent |               |
+
+##### ***Example***
+
+![1497346884131](Images/Week3/1497346884131.png)
+
+```octave
+function [jVal, gradient] = costFunction(theta)
+  jVal = (theta(1)-5)^5 + (theta(2)-5)^2
+  
+  gradient = zeros(2,1);
+  gradient(1) = 2*(theta(1)-5);
+  gradient(2) = 2*(theta(2)-5);
+end
+```
+
+```octave
+options = optimset('GradObj', 'on', 'MaxIter', 100);
+initialTheta = zeros(2,1);
+[optTheta, functionVal, exitFlag] = fminunc(@costFunction, initialTheta, options);
+% @costFunction : a pointer to the function 
+```
+
+==NOTE== `initialTheta` $\in R^d$ where $d \geq 2$
+
+##### Use with logistic regression 
+
+```octave
+function [jVal, gradient] = costFunction(theta)
+  jVal = [...code to compute J(theta)...];
+  gradient = [...code to compute derivative(s) of J(theta)...];
+end
+```
+
+## Multiclass Classification 
+
+Given a data set with 3 classes, left graph
+
+![1497348129058](Images/Week3/1497348129058.png)
+
+### ***Classification:*** One-VS-All
+
+Using *one-vs-all* classification we can separate the 3 different classes. 
+
+The idea is that we will change this problem into 3 different binary classification problems. 
+
+![cqmPjanSEeawbAp5ByfpEg_299fcfbd527b6b5a7440825628339c54_Screenshot-2016-11-13-10.52.29](Images/Week3/cqmPjanSEeawbAp5ByfpEg_299fcfbd527b6b5a7440825628339c54_Screenshot-2016-11-13-10.52.29.png)
+
+Where: $h_\theta^{(i)}=P(y=i|x;\theta)$ for $i=1,2,3$
+
+Where:
+
+* $i=1$ triangles
+* $i=2$ squares
+* $i=3$ circles
+
+#### Summary
+
+Train a logistic regression classifier $h_\theta^{(i)}$ for each class $i$ to predict the probability that $y=i$
+
+On a new input x, to make a prediction, pick the class $i$ that maximizes:
+$$
+\begin{align*}& y \in \lbrace0, 1 ... n\rbrace \newline& h_\theta^{(0)}(x) = P(y = 0 | x ; \theta) \newline& h_\theta^{(1)}(x) = P(y = 1 | x ; \theta) \newline& \cdots \newline& h_\theta^{(n)}(x) = P(y = n | x ; \theta) \newline& \mathrm{prediction} = \max_i( h_\theta ^{(i)}(x) )\newline\end{align*}
+$$
+
+## Dealing with Over-fitting - Regularization 
+
+##### ***Definition:*** Over-Fitting
+
+> If we have to many features (and not enough data), the learning hypothesis may fit the training set very well $J(\theta) \approx 0$ but fail to generalize to new examples 
+>
+> i.e. It makes accurate prediction for examples in the training set, but it does not generalize well to make accurate predictions on new, preciously unseen examples
+
+##### ***Definition:*** Underfitting  /  high bias
+
+> When the form of our hypothesis function $h$ maps poorly to the trend of the data. It is usually caused by a function that is too simple or uses too few features.
+
+##### ***Example*** Visual Illustration
+
+![1497353075710](Images/Week3/1497353075710.png)
+
+![1497353125902](Images/Week3/1497353125902.png)
+
+### Addressing Overfitting
+
+* Reduce number of features
+  * Manually select which features to keep
+  * Model selection algorithm (later in course)
+* ***Regularization***
+  * Keep all the features, reduce magnitude/values of paramaters $\theta_j$
+  * Works well when we have a lot of features, each of which contributes a bit to predicting $y$
 
 
-## Multiclass Classification
 
-## Dealing with Over-fitting
+### Intuition
+
+![1497354206494](Images/Week3/1497354206494.png)
+
+Then $\theta_3 \approx 0$ and $\theta_4 \approx 0$ -> then we get a function that resembles $\theta_0 + \theta_1x + \theta_2x^2$ 
+
+#### Core Idea 
+
+> Small values for parameters $\theta_0,\theta_1,...\theta_n$
+>
+> * Simpler hypothesis
+> * Less prone to overfitting
+
+### ***Example:*** Regularize all parameters
+
+$$
+\min_\theta\ \dfrac{1}{2m}\  \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})^2 + \lambda\ \sum_{j=1}^n \theta_j^2
+$$
+
+**Notation** 
+
+* $\lambda$ : regularization parameter 
+
+==NOTE== 
+
+* that $\theta_0$ isn't regularized, by convention 
+* The second summation term keeps the parameters small. 
+* The $\lambda$ term controls the trade of  between (the two summation terms) training the data well and keeping the parameters small.
+  * It determines how much the costs of our theta parameters are inflated.
+  * The larger it is, the more the parameters will made small -> smooth out the function too much and cause under-fitting
+
