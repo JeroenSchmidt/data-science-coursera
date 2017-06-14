@@ -19,3 +19,18 @@ as.numeric(as.character(f))
 ```
 
 where `f` is your dataset/dataframe$col
+
+# Levels
+
+## Removing Levels not being used
+
+```R
+> droplevels(x)
+# OR
+> subdf$letters
+[1] a b c
+Levels: a b c d e
+> subdf$letters <- factor(subdf$letters)
+# OR 
+factor(ff) 
+```
