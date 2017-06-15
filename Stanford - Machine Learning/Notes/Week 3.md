@@ -341,7 +341,7 @@ $$
 \begin{align*}& y \in \lbrace0, 1 ... n\rbrace \newline& h_\theta^{(0)}(x) = P(y = 0 | x ; \theta) \newline& h_\theta^{(1)}(x) = P(y = 1 | x ; \theta) \newline& \cdots \newline& h_\theta^{(n)}(x) = P(y = n | x ; \theta) \newline& \mathrm{prediction} = \max_i( h_\theta ^{(i)}(x) )\newline\end{align*}
 $$
 
-## Dealing with Over-fitting - Regularization 
+## Dealing with Over-fitting -> Regularization 
 
 ##### ***Definition:*** Over-Fitting
 
@@ -370,7 +370,7 @@ $$
 
 
 
-### Intuition
+### Intuition behind Regularization
 
 ![1497354206494](Images/Week3/1497354206494.png)
 
@@ -383,10 +383,12 @@ Then $\theta_3 \approx 0$ and $\theta_4 \approx 0$ -> then we get a function tha
 > * Simpler hypothesis
 > * Less prone to overfitting
 
-### ***Example:*** Regularize all parameters
+### Solution - Cost Function for Regularization
+
+##### ***Cost Function:*** Regularize all parameters
 
 $$
-\min_\theta\ \dfrac{1}{2m}\  \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})^2 + \lambda\ \sum_{j=1}^n \theta_j^2
+J(\theta) = \min_\theta\ \dfrac{1}{2m}\  \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})^2 + \lambda\ \sum_{j=1}^n \theta^2_j
 $$
 
 **Notation** 
@@ -401,3 +403,68 @@ $$
   * It determines how much the costs of our theta parameters are inflated.
   * The larger it is, the more the parameters will made small -> smooth out the function too much and cause under-fitting
 
+
+### Regularized *Linear Regression*
+
+#### ***Algorithm:***
+
+$$
+\begin{align*} & \text{Repeat}\ \lbrace \newline & \ \ \ \ \theta_0 := \theta_0 - \alpha\ \frac{1}{m}\ \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})x_0^{(i)} \newline & \ \ \ \ \theta_j := \theta_j - \alpha\ \left[ \left( \frac{1}{m}\ \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})x_j^{(i)} \right) + \frac{\lambda}{m}\theta_j \right] &\ \ \ \ \ \ \ \ \ \ j \in \lbrace 1,2...n\rbrace\newline & \rbrace \end{align*}
+$$
+
+* The first equation is as such because regularization isnt applied to $j=0$ 
+* The second equation is obtained from $\partial J/\partial \theta_j$
+
+The last equation is equivalent to: 
+$$
+\theta_j := \theta_j(1 - \alpha\frac{\lambda}{m}) - \alpha\frac{1}{m}\sum_{i=1}^m(h_\theta(x^{(i)}) - y^{(i)})x_j^{(i)}
+$$
+==Note== The term $(1 - \alpha\frac{\lambda}{m}) $ usually between $\in(0,1)$ acts as a shrinking term once multiplied onto parameter $\theta$ 
+i.e its exactly the same as gradient descent but whe re the parameter $\theta$ is shrunk my some small amount
+
+
+
+### Regularized *Normal Equation*
+
+#### ***Formula:***
+
+$$
+\begin{align*}& \theta = \left( X^TX + \lambda \cdot L \right)^{-1} X^Ty \newline& \text{where}\ \ L = \begin{bmatrix} 0 & & & & \newline & 1 & & & \newline & & 1 & & \newline & & & \ddots & \newline & & & & 1 \newline\end{bmatrix}\end{align*} \\
+\text{where } L \in R^{(n+1)\times(n+1)}
+$$
+
+#### Non-Inevitability
+
+Recall that the *Normal Equation* is of the form $\theta = (X^T X)^{-1}X^T y$ 
+Suppose $m \leq n$ then $X^TX$ is non-invertible/singular
+
+*Solution:* ***Regularized form helps with this!***
+
+As long as $\lambda > 0$ , then the term $ X^TX + \lambda \cdot L$ is *invertible* 
+$$
+\theta = \left( X^TX + \lambda \cdot L \right)^{-1} X^Ty
+$$
+
+### Regularized Logistic Regression 
+
+$$
+J(\theta) = - \frac{1}{m} \sum_{i=1}^m \large[ y^{(i)}\ \log (h_\theta (x^{(i)})) + (1 - y^{(i)})\ \log (1 - h_\theta(x^{(i)}))\large] + \frac{\lambda}{2m}\sum_{j=1}^n \theta_j^2
+$$
+
+#### ***Algorithm***
+
+$$
+\begin{align*} & \text{Repeat}\ \lbrace \newline & \ \ \ \ \theta_0 := \theta_0 - \alpha\ \frac{1}{m}\ \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})x_0^{(i)} \newline & \ \ \ \ \theta_j := \theta_j - \alpha\ \left[ \left( \frac{1}{m}\ \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})x_j^{(i)} \right) + \frac{\lambda}{m}\theta_j \right] &\ \ \ \ \ \ \ \ \ \ j \in \lbrace 1,2...n\rbrace\newline & \rbrace \end{align*}
+$$
+
+#### Advanced Optimization 
+
+Same as last section but with modified cost function $J$
+
+```octave
+function [jVal, gradient] = costFunction(theta)
+	jVal = [code to compute J]
+	gradient(1) = [code to compute partial J wrt \theta_0]
+	etc...
+	gradient(n+1)  = [code to compute partial J wrt \theta_n]
+```

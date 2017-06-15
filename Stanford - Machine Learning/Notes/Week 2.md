@@ -223,7 +223,7 @@ Matrix identity
 
 ### Non-Inevitability
 
-> What if $X^TX$ is non0invertible?
+> What if $X^TX$ is non-invertible?
 
 ==NOTE== Octave already considers this situation with `pinv` 
 
