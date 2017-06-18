@@ -145,7 +145,7 @@ $$
 $$
 The vectorized version;
 
-$∇J(θ)=1m⋅XT⋅(g(X⋅θ)−y⃗ )$
+$∇J(θ)=\frac{1}{m}⋅X^T⋅(g(X⋅θ)−y⃗ )$
 
 # Advanced Optimization
 
@@ -287,7 +287,7 @@ We can regularize this equation by adding a term to the end:
 $$
 J(\theta) = - \frac{1}{m} \sum_{i=1}^m \large[ y^{(i)}\ \log (h_\theta (x^{(i)})) + (1 - y^{(i)})\ \log (1 - h_\theta(x^{(i)}))\large] + \frac{\lambda}{2m}\sum_{j=1}^n \theta_j^2
 $$
-**Note Well:** The second sum, ∑nj=1θ2j **means to explicitly exclude** the bias term, $θ_0$. I.e. the θ vector is indexed from 0 to n (holding n+1 values, θ0through θn), and this sum explicitly skips $θ_0$, by running from 1 to n, skipping 0.
+**Note Well:** The second sum, $∑^n_{j=1}θ^2_j$ **means to explicitly exclude** the bias term, $θ_0$. I.e. the θ vector is indexed from 0 to n (holding n+1 values, $θ_0$ through $θ_n$), and this sum explicitly skips $θ_0$, by running from 1 to n, skipping 0.
 
 ### Gradient Descent
 
