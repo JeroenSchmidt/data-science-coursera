@@ -159,20 +159,39 @@ a^{(j)}=g(z^{(j)})\\
 h_Θ(x)=a^{(j+1)}=g(z^{(j+1)})
 $$
 
-### Intuition 
-
-![1498662799761](Images/Week4/1498662799761.png)
-
-Lets say we have a NN where we can only see layer 2 and 3. Our hypothesis is essentially calculated as a regression problem using the inputs from layer 2. 
-
-Rather then calculating the hypothesis value from the feature inputs $x​$ , $h​$ is calculated from the new features $a^{(2)}​$ **WHERE** the features from $a^{(2)}​$ are them selves learned as a function of the input.
-
-**TAKE AWAY** you aren't constrained to use the original features or polynomial expressions of the features as you are with logistic regression because of the hidden layers compute new layers outside these constraints through the $\Theta$ mapping!
-
-##### Term: - Architecture
+#### Architecture
 
 - The way the NN is laid out 
 
 *Example:*
 
 ![1498663305967](Images/Week4/1498663305967.png)
+
+ 
+
+### Intuition 1 
+
+![1498662799761](Images/Week4/1498662799761.png)
+
+Lets say we have a NN where we can only see layer 2 and 3. Our hypothesis is essentially calculated as a regression problem using the inputs from layer 2. 
+
+Rather then calculating the hypothesis value from the feature inputs $x$ , $h$ is calculated from the new features $a^{(2)}$ **WHERE** the features from $a^{(2)}$ are them selves learned as a function of the input.
+
+**TAKE AWAY** you aren't constrained to use the original features or polynomial expressions of the features as you are with logistic regression because of the hidden layers compute new layers outside these constraints through the $\Theta$ mapping!
+
+### Intuition II & III
+
+Have a look at this [markdown](../Material/Lecture Notes/Week 4 Notes.md)
+
+### Multiclass Classification 
+
+For when we have more then one category we would like to classify. **One-vs-ALL**
+
+*example* 
+
+- character image classification 
+- Different objects
+
+![1498744690381](Images/Week4/1498744690381.png)
+
+![1498744746178](Images/Week4/1498744746178.png)

@@ -80,7 +80,7 @@ This is saying that we compute our activation nodes by using a 3×4 matrix of pa
 
 Each layer gets its own matrix of weights, $Θ^{(j)}$.
 
-**The dimensions of these matrices of weights is determined as follows:**
+#### **The dimensions of these matrices of weights is determined as follows:**
 
 $\text{If network has } s_j \text{units in layer } j \text{and } s_{j+1} \text{units in layer } j+1\text{, then }Θ^{(j)} \text{will be of dimension } s_{j+1}×(s_j+1)$
 
@@ -149,9 +149,11 @@ Rather then calculating the hypothesis value from the feature inputs $x$ , $h$ i
 
 # Examples and Intuitions I
 
-A simple example of applying neural networks is by predicting $x_1$ AND $x_2$, which is the logical 'and' operator and is only true if both $x_1$ and $x_2$ are 1.
+A simple example of applying neural networks is by predicting $y=x_1$ AND $x_2$, which is the logical 'and' operator and is only true if both $x_1$ and $x_2$ are 1.
 
 The graph of our functions will look like:
+
+![1498742657653](images/Week 4/1498742657653.png)
 $$
 \begin{align*}\begin{bmatrix}x_0 \newline x_1 \newline x_2\end{bmatrix} \rightarrow\begin{bmatrix}g(z^{(2)})\end{bmatrix} \rightarrow h_\Theta(x)\end{align*}
 $$
@@ -165,6 +167,8 @@ This will cause the output of our hypothesis to only be positive if both $x_1$ a
 $$
 \begin{align*}& h_\Theta(x) = g(-30 + 20x_1 + 20x_2) \newline \newline & x_1 = 0 \ \ and \ \ x_2 = 0 \ \ then \ \ g(-30) \approx 0 \newline & x_1 = 0 \ \ and \ \ x_2 = 1 \ \ then \ \ g(-10) \approx 0 \newline & x_1 = 1 \ \ and \ \ x_2 = 0 \ \ then \ \ g(-10) \approx 0 \newline & x_1 = 1 \ \ and \ \ x_2 = 1 \ \ then \ \ g(10) \approx 1\end{align*}
 $$
+![1498743074258](images/Week 4/1498743074258.png)
+
 So we have constructed one of the fundamental operations in computers by using a small neural network rather than using an actual AND gate. Neural networks can also be used to simulate all the other logical gates.
 
 # Examples and Intuitions II
@@ -172,9 +176,23 @@ So we have constructed one of the fundamental operations in computers by using a
 The $Θ^{(1)}$ matrices for AND, NOR, and OR are:
 
 $$
-\begin{align*}AND:\newline\Theta^{(1)} &=\begin{bmatrix}-30 & 20 & 20\end{bmatrix} \newline NOR:\newline\Theta^{(1)} &= \begin{bmatrix}10 & -20 & -20\end{bmatrix} \newline OR:\newline\Theta^{(1)} &= \begin{bmatrix}-10 & 20 & 20\end{bmatrix} \newline\end{align*}
+\begin{align*}AND:\newline\Theta^{(1)} &=\begin{bmatrix}-30 & 20 & 20\end{bmatrix} \newline 
+NOR:\newline
+\Theta^{(1)} &= \begin{bmatrix}10 & -20 & -20\end{bmatrix} \newline OR:
+\newline
+\Theta^{(1)} &= \begin{bmatrix}-10 & 20 & 20\end{bmatrix} \newline 
+NOT: \newline
+\Theta^{(1)}&=[10 -20]\end{align*}
 $$
+![1498744562459](images/Week 4/1498744562459.png)
+
 We can combine these to get the XNOR logical operator (which gives 1 if $x_1$ and $x_2$ are both 0 or both 1).
+
+The $\text{XNOR}$ results look like:
+
+![1498742591534](images/Week 4/1498742591534.png) 
+
+
 $$
 \begin{align*}\begin{bmatrix}x_0 \newline x_1 \newline x_2\end{bmatrix} \rightarrow\begin{bmatrix}a_1^{(2)} \newline a_2^{(2)} \end{bmatrix} \rightarrow\begin{bmatrix}a^{(3)}\end{bmatrix} \rightarrow h_\Theta(x)\end{align*}
 $$
@@ -182,19 +200,27 @@ For the transition between the first and second layer, we'll use a $Θ^{(1)}$ ma
 $$
 \Theta^{(1)} =\begin{bmatrix}-30 & 20 & 20 \newline 10 & -20 & -20\end{bmatrix}
 $$
+![1498744073472](images/Week 4/1498744073472.png)
+
 For the transition between the second and third layer, we'll use a $Θ^{(2)}$ matrix that uses the value for OR:
 $$
 \Theta^{(2)} =\begin{bmatrix}-10 & 20 & 20\end{bmatrix}
 $$
+![1498744161469](images/Week 4/1498744161469.png)
+
 Let's write out the values for all our nodes:
 $$
 \begin{align*}& a^{(2)} = g(\Theta^{(1)} \cdot x) \newline& a^{(3)} = g(\Theta^{(2)} \cdot a^{(2)}) \newline& h_\Theta(x) = a^{(3)}\end{align*}
 $$
 And there we have the XNOR operator using two hidden layers!
 
+![1498744249675](images/Week 4/1498744249675.png)
+
 # Multiclass Classification
 
 To classify data into multiple classes, we let our hypothesis function return a vector of values. Say we wanted to classify our data into one of four final resulting classes:
+
+![1498744690381](images/Week 4/1498744690381.png)
 $$
 \begin{align*}\begin{bmatrix}x_0 \newline x_1 \newline x_2 \newline\cdots \newline x_n\end{bmatrix} \rightarrow\begin{bmatrix}a_0^{(2)} \newline a_1^{(2)} \newline a_2^{(2)} \newline\cdots\end{bmatrix} \rightarrow\begin{bmatrix}a_0^{(3)} \newline a_1^{(3)} \newline a_2^{(3)} \newline\cdots\end{bmatrix} \rightarrow \cdots \rightarrow\begin{bmatrix}h_\Theta(x)_1 \newline h_\Theta(x)_2 \newline h_\Theta(x)_3 \newline h_\Theta(x)_4 \newline\end{bmatrix} \rightarrow\end{align*}
 $$
@@ -208,6 +234,8 @@ In which case our resulting class is the third one down, or $h_Θ(x)_3$.
 
 We can define our set of resulting classes as $y$:
 
-![img](https://d3c33hcgiwev3.cloudfront.net/imageAssetProxy.v1/KBpHLXqiEealOA67wFuqoQ_95654ff11df1261d935ab00553d724e5_Screenshot-2016-09-14-10.38.27.png?expiry=1498262400000&hmac=CyFe0KSpAa7NCOVL8anJ7Hndt-h2zQh8uSnvsEe2wKM)
+![KBpHLXqiEealOA67wFuqoQ_95654ff11df1261d935ab00553d724e5_Screenshot-2016-09-14-10.38.27](images/Week 4/KBpHLXqiEealOA67wFuqoQ_95654ff11df1261d935ab00553d724e5_Screenshot-2016-09-14-10.38.27.png)
 
 Our final value of our hypothesis for a set of inputs will be one of the elements in y
+
+![1498744746178](images/Week 4/1498744746178.png)
