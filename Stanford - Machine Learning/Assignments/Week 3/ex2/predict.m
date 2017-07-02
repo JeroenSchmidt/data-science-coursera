@@ -17,6 +17,7 @@ p = zeros(m, 1);
 
 predictions = X*theta;
 
+%no need to compute the sigmoid as we can just look at the decision boundaries
 p = predictions >= 0;
 
 
