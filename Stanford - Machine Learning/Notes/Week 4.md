@@ -195,3 +195,13 @@ For when we have more then one category we would like to classify. **One-vs-ALL*
 ![1498744690381](Images/Week4/1498744690381.png)
 
 ![1498744746178](Images/Week4/1498744746178.png)
+
+# Some Final Notes:
+
+- The outputs of the sigmoid functions between the layers will always output values between (0,1) *BUT* that doesnt mean that the accumulated inputs into the next layer are between $(0,1)$
+
+- The outputs of a neural network are not probabilities, so their sum need not be 1.
+
+- Any logical function over binary-valued inputs $x_1$ and $x_2$ can be approximately represented using some neural network. 
+
+  [Have a look here for quiz feedback on the nuances of the theory](https://github.com/Borye/machine-learning-coursera-1/tree/master/Week%204%20Assignments/VIII.%20Neural%20Networks%20Representation%20-%20Quiz)

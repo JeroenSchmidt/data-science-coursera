@@ -14,13 +14,17 @@ Performing linear regression with a complex set of data with many features is ve
 $$
 \begin{align*}& g(\theta_0 + \theta_1x_1^2 + \theta_2x_1x_2 + \theta_3x_1x_3 \newline& + \theta_4x_2^2 + \theta_5x_2x_3 \newline& + \theta_6x_3^2 )\end{align*}
 $$
-That gives us 6 features. The exact way to calculate how many features for all polynomial terms is the combination function with repetition: [http://www.mathsisfun.com/combinatorics/combinations-permutations.html](http://www.mathsisfun.com/combinatorics/combinations-permutations.html) $\frac{(n+r−1)!}{r!(n−1)!}$. In this case we are taking all two-element combinations of three features: $\frac{(3+2−1)!}{(2!⋅(3−1)!)} = \frac{4!}{4}=6$. (**Note**: you do not have to know these formulas, I just found it helpful for understanding).
+That gives us 6 features. The exact way to calculate how many features for all polynomial terms is the combination function with repetition: [http://www.mathsisfun.com/combinatorics/combinations-permutations.html](http://www.mathsisfun.com/combinatorics/combinations-permutations.html)
+$$
+ \frac{(n+r−1)!}{r!(n−1)!} 
+$$
+In this case we are taking all *two-element combinations of three features*: $\frac{(3+2−1)!}{(2!⋅(3−1)!)} = \frac{4!}{4}=6$. (**Note**: you do not have to know these formulas, I just found it helpful for understanding).
 
 For 100 features, if we wanted to make them quadratic we would get $\frac{(100+2−1)!}{(2⋅(100−1)!)}=5050$ resulting new features.
 
 We can approximate the growth of the number of new features we get with all quadratic terms with $O(n^2/2)$. And if you wanted to include all cubic terms in your hypothesis, the features would grow asymptotically at $O(n^3)$. These are very steep growths, so as the number of our features increase, the number of quadratic or cubic features increase very rapidly and becomes quickly impractical.
 
-Example: let our training set be a collection of $50$ x $50$ pixel black-and-white photographs, and our goal will be to classify which ones are photos of cars. Our feature set size is then $n = 2500$ if we compare every pair of pixels.
+**Example**: let our training set be a collection of $50$ x $50$ pixel black-and-white photographs, and our goal will be to classify which ones are photos of cars. Our feature set size is then $n = 2500$ if we compare every pair of pixels.
 
 Now let's say we need to make a quadratic hypothesis function. With quadratic features, our growth is $O(n^2/2)$. So our total features will be about $2500^2/2=3125000$, which is very impractical.
 
@@ -82,7 +86,7 @@ Each layer gets its own matrix of weights, $Θ^{(j)}$.
 
 #### **The dimensions of these matrices of weights is determined as follows:**
 
-$\text{If network has } s_j \text{units in layer } j \text{and } s_{j+1} \text{units in layer } j+1\text{, then }Θ^{(j)} \text{will be of dimension } s_{j+1}×(s_j+1)$
+$\text{If network has } s_j \text{ units in layer } j \text{ and } s_{j+1} \text{units in layer } j+1\text{, then }Θ^{(j)} \text{will be of dimension } s_{j+1}×(s_j+1)$
 
 The +1 comes from the addition in $Θ^{(j)}$ of the "bias nodes," $x_0$ and $Θ^{(j)}_0$. In other words the output nodes will not include the bias nodes while the inputs will.
 
@@ -100,7 +104,7 @@ z_k^{(2)} = \Theta_{k,0}^{(1)}x_0 + \Theta_{k,1}^{(1)}x_1 + \cdots + \Theta_{k,n
 $$
 The vector representation of $x$ and $z^j$ is:
 $$
-\begin{align*}x = \begin{bmatrix}x_0 \newline x_1 \newline\cdots \newline x_n\end{bmatrix} &z^{(j)} = \begin{bmatrix}z_1^{(j)} \newline z_2^{(j)} \newline\cdots \newline z_n^{(j)}\end{bmatrix}\end{align*}
+\begin{align*}x = \begin{bmatrix}x_0 \newline x_1 \newline\cdots \newline x_n\end{bmatrix} & \text{ , }z^{(j)} = \begin{bmatrix}z_1^{(j)} \newline z_2^{(j)} \newline\cdots \newline z_n^{(j)}\end{bmatrix}\end{align*}
 $$
 Setting $x=a^{(1)}$ (for notation consistancy we set the inout x to be layer $a^{(1)}$), we can rewrite the equation as:
 
@@ -131,11 +135,11 @@ $h_Θ(x)=a^{(j+1)}=g(z^{(j+1)})$
 
 Notice that in this **last step**, between layer $j$ and layer $j+1$, we are doing **exactly the same thing** as we did in logistic regression.
 
-Adding all these intermediate layers in neural networks allows us to more elegantly produce interesting and more complex non-linear hypotheses.
+***Adding all these intermediate layers in neural networks allows us to more elegantly produce interesting and more complex non-linear hypotheses.***
 
 #### Method name:
 
-This process to compute $h$ in the next two sections is also called forward propagation - we start with the activation of the input units and forward propagate it to the hidden layer etc. 
+This process to compute $h$ in the next two sections is also called ***forward propagation*** - we start with the activation of the input units and forward propagate it to the hidden layer etc. 
 
 # Intuition 
 
@@ -239,3 +243,4 @@ We can define our set of resulting classes as $y$:
 Our final value of our hypothesis for a set of inputs will be one of the elements in y
 
 ![1498744746178](images/Week 4/1498744746178.png)
+
