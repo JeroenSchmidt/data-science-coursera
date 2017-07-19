@@ -23,12 +23,23 @@ p = zeros(size(X, 1), 1);
 
 % =================== NOTE TO SELF ============================
 
-% X is a matrix of mutiple inputs, ie each row vector is of length 400 wihch is 
-% just a 20x20 image thats been reduced into a single row 
+% We are trying to predict what number an image is representing 
+% (between 1 and 10)
 
-% this implementation could use a for loop... but for understanding purposes,  
+% Each image is 20x20 pixels, so that is 400 pixels -> 400 vector points per input
+
+% X is a matrix of mutiple inputs, ie each row vector is 400 points
+
+% For each input x \in X we produced an output hypothesis with 10 output units
+
+% NB: The value in each output unit corresponds to the confidence of that unit 
+% being the correct one, where the index represents the number being prediced.
+% >> i.e. The index of the output unit with the highest value 
+% is the label (number) that our NN has predicted to be in the image  
+
+% =============================================================
+% This implementation could use a for loop... but for understanding purposes,  
 % I have left the sequencial calculations of the neural nets like this
-
 % =============================================================
 
 % Concat the bias input for every x \in X
@@ -44,8 +55,8 @@ z3 = a2*Theta2';
 a3 = sigmoid(z3);
 
 % Find max
-% For each input x \in X we produced an output hypothesis with 10 output units
-% i_max is returning the index of the highest output unit per x
+% i_max is returning the index of the highest output unit per x which 
+% corresponds to what number has been prediced 
 [p_max, i_max]=max(a3, [], 2);
 
 p = i_max;
