@@ -69,8 +69,8 @@ As before with logistic regression, we square every term.
 
 - the double sum simply adds up the logistic regression costs calculated for each cell in the output layer; and
 - the triple sum simply adds up the squares of all the individual Θs in the entire network.
-- the i in the triple sum does **not** refer to training example i
-- Note that the regularization summation ignores the bias values where $i=0$
+- the $i$ in the triple sum does **not** refer to training example i
+- Note that the regularization summation ignores the weights for the bias units; where $i=0$
 
 # Backpropagation Algorithm
 
@@ -299,7 +299,8 @@ Instead we can randomly initialize our weights:
 Initialize each $Θ^{(l)}_{ij}$ to a random value between $[−ϵ,ϵ]$:
 
 $$
-\epsilon = \dfrac{\sqrt{6}}{\sqrt{\mathrm{Loutput} + \mathrm{Linput}}}
+\epsilon = \dfrac{\sqrt{6}}{\sqrt{\mathrm{Loutput} + \mathrm{Linput}}} \\
+\text{ where Loutput} = s_l \text{ and } \text{ Linput} = s_{l+1} \text{are the number of units adjacent to } \Theta^{(l)}
 $$
 
 $$

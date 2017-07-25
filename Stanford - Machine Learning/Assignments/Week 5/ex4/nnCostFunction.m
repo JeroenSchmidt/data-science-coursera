@@ -39,6 +39,46 @@ Theta2_grad = zeros(size(Theta2));
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
 %
+
+% forward propagate
+A1 = [ones(m,1) X]; %input layer
+
+% first hidden layer - with 25 activation units
+Z2 = A1*Theta1'; 
+A2 = sigmoid(Z2);
+
+% output layer, in this example we have 10 output digits per x \in X
+A2 = [ones(m,1) A2];
+Z3 = A2*Theta2';
+A3 = sigmoid(Z3); %our output units h=a3 
+
+% Create Matrix for Y values converted to binary vector representation
+k = size(A3,2); % number of output units
+Y = zeros(m,k);
+i = sub2ind(size(Y), 1:rows(Y), y');
+Y(i) = 1;
+
+% loop accross all training examples m, 
+% calculated accross K nodes using vector multiplication
+for i=1:m
+  J = J + -Y(i,:)*log(A3(i,:)')-(1-Y(i,:))*log(1-A3(i,:)');
+endfor
+
+%the following is vectorized
+%J = sum(sum(-Y.*log(a3)-(1-Y).*log(1-a3)))
+
+% Regularization
+% Remove the Bias Coloumn 
+Theta1_noBias = Theta1(1:end,2:end)(:);
+Theta2_noBias = Theta2(1:end,2:end)(:);
+
+reg_cost = lambda/(2*m)*(sum(Theta1_noBias.^2) + sum(Theta2_noBias.^2));
+
+J = 1/m*J + reg_cost;
+J
+
+
+
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
 %         the cost function with respect to Theta1 and Theta2 in Theta1_grad and
@@ -61,6 +101,38 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                Vectorised BackPropagation                                  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Initail delta from output layer
+delta_3 = A3-Y;
+
+%Remove first vector col that is for the bias unit
+% This error delta can be though of the error from the output layer being 
+% propagated by the weights theta2 back into layer 2
+delta_2  = delta_3*Theta2(:,2:end).*sigmoidGradient(Z2);
+
+% Create Delta -> error * activation units gives us the partial wrt theta_ij 
+Delta_2 = 1/m*delta_3'*A2;
+Delta_1 = 1/m*delta_2'*A1;
+
+%%%%% Theta gradients 
+% Regularization of gradient, adding zero vector in i=1 to account for bias vector col
+Theta1_reg = (lambda/m)*Theta1;
+Theta1_reg(:,1) = zeros(size(Theta1,1),1);
+Theta2_reg = (lambda/m)*Theta2;
+Theta2_reg(:,1) = zeros(size(Theta2,1),1);
+
+% Combining Delta term and Regularized Theta for gradient output
+Theta2_grad = Delta_2 + Theta2_reg;
+Theta1_grad = Delta_1 + Theta1_reg;
+
+grad = [Theta1_grad(:);Theta2_grad(:)];
 
 
 

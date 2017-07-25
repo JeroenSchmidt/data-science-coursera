@@ -4,6 +4,8 @@ typora-copy-images-to: images\Week 6
 
 # ML:Advice for Applying Machine Learning
 
+[TOC]
+
 # Deciding What to Try Next
 
 Errors in your predictions can be troubleshooted by:
@@ -42,6 +44,7 @@ The new procedure using these two sets is then:
    0 & \mbox otherwise 
    \end{matrix}
    $$
+
 
 
 This gives us a binary 0 or 1 error result based on a misclassification.
