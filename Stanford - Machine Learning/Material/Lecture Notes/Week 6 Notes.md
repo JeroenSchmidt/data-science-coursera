@@ -74,6 +74,7 @@ With a given dataset of training examples, we can split up the data into two set
 
 
 
+
 This gives us a binary 0 or 1 error result based on a misclassification.
 
 The average test error for the test set is
@@ -143,12 +144,12 @@ In this section we examine the relationship between the degree of the polynomial
 **High bias (underfitting)**: 
 
 * $J_\text{train}(Θ)$ and $J_\text{CV}(Θ)$ will be high. 
-*  $J_{CV}(Θ)≈J_\text{train}(Θ)$.
+* $J_{CV}(Θ)≈J_\text{train}(Θ)$.
 
 **High variance (overfitting)**: 
 
 * $J_\text{train}(Θ)$ will be low and $J_{CV}(Θ)$ will be much greater than $J_\text{train}(Θ)$.
-*  $J_{CV}(Θ)>>J_\text{train}(Θ)$
+* $J_{CV}(Θ)>>J_\text{train}(Θ)$
 
 Our goal when dealing with these two terms is to find the golden mean between these two.
 
@@ -348,11 +349,21 @@ The recommended approach to solving machine learning problems is:
 
 - Start with a simple algorithm, implement it quickly, and test it early.
 - Plot learning curves to decide if more data, more features, etc. will help
-- Error analysis: manually examine the errors on examples in the cross validation set and try to spot a trend.
+- **Error analysis:** manually examine the errors on examples in the cross validation set and try to spot a trend.
+
+**Error analysis example:** Assume that we have 500 emails and our algorithm misclassifies a 100 of them. We could manually analyze the 100 emails and categorize them based on what type of emails they are. We could then try to come up with new cues and features that would help us classify these 100 emails correctly. Hence, if most of our misclassified emails are those which try to steal passwords, then we could find some features that are particular to those emails and add them to our model.
+
+**Quick Evaluation**
 
 It's important to get error results as a single, numerical value. Otherwise it is difficult to assess your algorithm's performance.
 
-You may need to process your input before it is useful. For example, if your input is a set of words, you may want to treat the same word with different forms (fail/failing/failed) as one word, so must use "stemming software" to recognize them all as one.
+You may need to process your input before it is useful. For example, if your input is a set of words, you may want to treat the same word with different forms (fail/failing/failed) as one word, so must use "stemming software" to recognize them all as one, but inorder to quickly do this a quick to understand error result should be used to determine if our prosed solution makes the ML model better. 
+
+## Take away:
+
+For classification problems, perform data analysis on the incorrect ML model outputs. Look at the aggregated features across the classification categories to determine what features are important and not important - look at what is being missed. This helps guide where you should focus to create more sophisticated features.  
+
+This sort of error analysis, which is the process of manually examining the mistakes that the algorithm makes, can often help guide you to the most fruitful avenues to pursue
 
 # Error Metrics for Skewed Classes
 
@@ -366,68 +377,94 @@ Or to say it another way, when we have lot more examples from one class than fro
 
 For this we can use **Precision/Recall**.
 
-- Predicted: 1, Actual: 1 --- True positive
-- Predicted: 0, Actual: 0 --- True negative
-- Predicted: 0, Actual, 1 --- False negative
-- Predicted: 1, Actual: 0 --- False positive
+![1502050901194](images/Week 6/1502050901194.png)
 
-**Precision**: of all patients we predicted where y=1, what fraction actually has cancer?
+**Precision**: of all patients we predicted have cancer, what fraction actually has cancer (in that set)?
 $$
 \dfrac{\text{True Positives}}{\text{Total number of predicted positives}}
-= \dfrac{\text{True Positives}}{\text{True Positives}+\text{False positives}}
+= \dfrac{\text{True Positives}}{\text{True Positives}+\text{False POSITIVES}}
 $$
+![1502051250114](images/Week 6/1502051250114.png)
+
 **Recall**: Of all the patients that actually have cancer, what fraction did we correctly detect as having cancer?
 $$
-\dfrac{\text{True Positives}}{\text{Total number of actual positives}}= \dfrac{\text{True Positives}}{\text{True Positives}+\text{False negatives}}
+\dfrac{\text{True Positives}}{\text{Total number of actual positives}}= \dfrac{\text{True Positives}}{\text{True Positives}+\text{False NEGATIVES}}
 $$
+![1502051265952](images/Week 6/1502051265952.png)
+
 These two metrics give us a better sense of how our classifier is doing. We want both precision and recall to be high.
 
-In the example at the beginning of the section, if we classify all patients as 0, then our **recall** will be 00+f=0, so despite having a lower error percentage, we can quickly see it has worse recall.
+If we predict all the patients to be cancer free, $y=0$, then our **recall** will be $\frac{0}{0+f}=0$, so despite having a lower error percentage, we can quickly see it has worse recall.
 
 $\text{Accuracy} = \frac{\text{true positive}+\text{true negative}}{\text{total population}}$
 
-Note 1: if an algorithm predicts only negatives like it does in one of exercises, the precision is not defined, it is impossible to divide by 0. F1 score will not be defined too.
+**Note**: 
+
+* if an algorithm predicts only negatives like it does in one of exercises, the precision is not defined, it is impossible to divide by 0. F1 score will not be defined too.
+* By convention, $y=1$ for the class that is rarer 
 
 # Trading Off Precision and Recall
 
-We might want a **confident** prediction of two classes using logistic regression. One way is to increase our threshold:
+**Context:** Controlling the precision and recall using a threshold
+
+We might want a **confident** (higher threshold) prediction of two classes using logistic regression, predict $y=1$ only if very confident. 
+
+One way is to increase our threshold:
 
 - Predict 1 if: $h_θ(x)≥0.7$
 - Predict 0 if: $h_θ(x)<0.7$
 
 This way, we only predict cancer if the patient has a 70% chance.
 
-Doing this, we will have **higher precision** but **lower recall** (refer to the definitions in the previous section).
+* Doing this, we will have **higher precision** but **lower recall** (refer to the definitions in the previous section).
 
-In the opposite example, we can lower our threshold:
+In the opposite example, we want to avoid missing to many cases of cancer $y=1$, we can lower our threshold:
 
 - Predict 1 if: $h_θ(x)≥0.3$
 - Predict 0 if: $h_θ(x)<0.3$
 
 That way, we get a very **safe** prediction. This will cause **higher recall** but **lower precision**.
 
-The greater the threshold, the greater the precision and the lower the recall.
+**Property**
 
-The lower the threshold, the greater the recall and the lower the precision.
+* The greater the threshold, the greater the precision and the lower the recall.
 
-In order to turn these two metrics into one single number, we can take the **F value**.
 
-One way is to take the **average**:
+* The lower the threshold, the greater the recall and the lower the precision.
+
+Example diagram below. The precision recall curve can have different forms. 
+
+![1502052397276](images/Week 6/1502052397276.png)
+
+## F Score
+
+**Context: ** Single real number evaluation metric. 
+
+How do we easily evaluate the following table? *Using the F1 score*
+
+![1502052793818](images/Week 6/1502052793818.png)
+
+1) *One way is to take the **average**:*
 
 $$
 \frac{P+R}{2}
 $$
 
 
-This does not work well. If we predict all y=0 then that will bring the average up despite having 0 recall. If we predict all examples as y=1, then the very high recall will bring up the average despite having 0 precision.
+This does not work well. If we predict all $y=0$ then that will bring the average up despite having 0 recall. If we predict all examples as $y=1$, then the very high recall will bring up the average despite having 0 precision.
 
-A better way is to compute the **F Score** (or F1 score):
+2) *A better way is to compute the **F Score** (or F1 score):*
+$$
+F Score=2\frac{PR}{P+R}
+$$
 
-$F Score=2\frac{PR}{P+R}$
+* Intuition: Its like the average but gives the lower value.
+* In order for the F Score to be large, both precision and recall must be large.
+* For worst case and best case:
 
-In order for the F Score to be large, both precision and recall must be large.
+![1502052945244](images/Week 6/1502052945244.png)
 
-We want to train precision and recall on the **cross validation set** so as not to bias our test set.
+**NOTE:**  We want to train precision and recall on the **cross validation set** so as not to bias our test set.
 
 # Data for Machine Learning
 
