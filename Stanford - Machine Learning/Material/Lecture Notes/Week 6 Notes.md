@@ -6,13 +6,29 @@ typora-copy-images-to: images\Week 6
 
 [TOC]
 
+# Review
+
+## Over and under fitting
+
+![1502040245805](images/Week 6/1502040245805.png)
+
+## Overfitting
+
+![1502038516036](images/Week 6/1502038516036.png)
+
+
+
 # Deciding What to Try Next
 
 Errors in your predictions can be troubleshooted by:
 
 - Getting more training examples
+  - A lot of time can be wasted here
 - Trying smaller sets of features
+  - Prevent over fitting
 - Trying additional features
+  - A lot of time can be wasted here
+  - Determine if this will even help
 - Trying polynomial features
 - Increasing or decreasing λ
 
@@ -22,12 +38,20 @@ Don't just pick one of these avenues at random. We'll explore diagnostic techniq
 
 A hypothesis may have low error for the training examples but still be inaccurate (because of overfitting).
 
-With a given dataset of training examples, we can split up the data into two sets: a **training set** and a **test set**.
+With a given dataset of training examples, we can split up the data into two sets: 
 
-The new procedure using these two sets is then:
+* a **training set** 
+  * +- 70%
+* a **test set**
+  * +- 30%
+* NOTE: Randomly select the data if ordering in the data is important 
 
-1. Learn Θ and minimize Jtrain(Θ) using the training set
+*The new procedure using these two sets is then:*
+
+1. Learn $Θ$ and minimize Jtrain(Θ) using the training set
 2. Compute the test set error Jtest(Θ)
+
+![1502038040010](images/Week 6/1502038040010.png)
 
 ## The test set error
 
@@ -40,10 +64,13 @@ The new procedure using these two sets is then:
    $$
    err(h_\Theta(x),y) =
    \begin{matrix}
-   1 & \mbox{if } h_\Theta(x) \geq 0.5\ and\ y = 0\ or\ h_\Theta(x) < 0.5\ and\ y = 1\newline
+   1 & \mbox{if } h_\Theta(x) \geq 0.5\ and\ y = 0\ or\ h_\Theta(x) < 0.5\ and\ y = 1 \text{ (incorrect prediction)}\newline
    0 & \mbox otherwise 
    \end{matrix}
    $$
+
+
+
 
 
 
@@ -57,20 +84,29 @@ This gives us the proportion of the test data that was misclassified.
 
 # Model Selection and Train/Validation/Test Sets
 
-- Just because a learning algorithm fits a training set well, that does not mean it is a good hypothesis.
-- The error of your hypothesis as measured on the data set with which you trained the parameters will be lower than any other data set.
+**Example:** How do we select the polynomial degree?
 
 In order to choose the model of your hypothesis, you can test each degree of polynomial and look at the error result.
+
+**NOTE:**
+
+- Just because a learning algorithm fits a training set well, that does not mean it is a good hypothesis.
+- The error of your hypothesis as measured on the data set with which you trained the parameters will be lower than any other data set.
 
 **Without the Validation Set (note: this is a bad method - do not use it)**
 
 1. Optimize the parameters in Θ using the training set for each polynomial degree.
 2. Find the polynomial degree d with the least error using the test set.
 3. Estimate the generalization error also using the test set with $J_\text{test}(Θ^{(d)})$, ($d = \theta$ from polynomial with lower error);
+   1. report generalized error = error of $J_\text{test}(\theta^{(d)})$
 
-In this case, we have trained one variable, d, or the degree of the polynomial, using the test set. This will cause our error value to be greater for any other set of data.
+In this case, we have trained one variable, d, or the degree of the polynomial, using the test set. 
+This will cause our error value to be greater for any other set of data as the stated error is the most optimistic error for the model.
 
-**Use of the CV set**
+**NOTE** The problem with this method is that the selection process does not take into account the possibility of over fitting of the variable $d$. i.e our extra parameter $d$ is fit to the test set and we do in fact not know how well it will do on data that the model has not seen. 
+*Solutions:* Use another (unseen) data set to test the generalized error
+
+**Use of the *Cross validation* set**
 
 To solve this, we can introduce a third set, the **Cross Validation Set**, to serve as an intermediate set that we can train d with. Then our test set will give us an accurate, non-optimistic error.
 
@@ -84,127 +120,166 @@ We can now calculate three separate error values for the three different sets.
 
 **With the Validation Set (note: this method presumes we do not also use the CV set for regularization)**
 
-1. Optimize the parameters in Θ using the training set for each polynomial degree.
-2. Find the polynomial degree d with the least error using the cross validation set.
-3. Estimate the generalization error using the test set with $J_\text{test}(Θ^{(d)})$, ($d = \theta$ from polynomial with lower error);
+1. Optimize the parameters in Θ using the ***training set*** for each polynomial degree.
+2. Find the polynomial degree d with the least error using the ***CV set***
+3. Estimate the generalization error using the ***test set*** with $J_\text{test}(Θ^{(d)})$, ($d = \theta$ from polynomial with lower error);
 
-This way, the degree of the polynomial d has not been trained using the test set.
+==This way, the degree of the polynomial d has not been trained using the test set.==
 
 (Mentor note: be aware that using the CV set to select 'd' means that we cannot also use it for the validation curve process of setting the lambda value).
+
+## Take away
+
+When calculating errors be sure to consider how the different layers of trained variables are fitted, and how the data sets might as a result report incorrect or optimistic error values.
+
+We need to have $n$ independent data sets for every $n$ layer of training variables (think of them as training variables that are dependent on each other) . 
+
+i.e. if we want to include the selection of lambda in the method stated above we will need a forth independent data set. 
 
 # Diagnosing Bias vs. Variance
 
 In this section we examine the relationship between the degree of the polynomial d and the underfitting or overfitting of our hypothesis.
 
-- We need to distinguish whether **bias** or **variance** is the problem contributing to bad predictions.
-- High bias is underfitting and high variance is overfitting. We need to find a golden mean between these two.
+**High bias (underfitting)**: 
+
+* $J_\text{train}(Θ)$ and $J_\text{CV}(Θ)$ will be high. 
+*  $J_{CV}(Θ)≈J_\text{train}(Θ)$.
+
+**High variance (overfitting)**: 
+
+* $J_\text{train}(Θ)$ will be low and $J_{CV}(Θ)$ will be much greater than $J_\text{train}(Θ)$.
+*  $J_{CV}(Θ)>>J_\text{train}(Θ)$
+
+Our goal when dealing with these two terms is to find the golden mean between these two.
+
+**Example:** Selecting polynomial degree $d$ 
+
+![yPz7yntYEeam4BLcQYZr8Q_07e80cbb290293d193f3cd92f1148e16_300px-Features-and-polynom-degree](images/Week 6/yPz7yntYEeam4BLcQYZr8Q_07e80cbb290293d193f3cd92f1148e16_300px-Features-and-polynom-degree.png)
 
 The training error will tend to **decrease** as we increase the degree d of the polynomial.
 
 At the same time, the cross validation error will tend to **decrease** as we increase d up to a point, and then it will **increase** as d is increased, forming a convex curve.
 
-**High bias (underfitting)**: both Jtrain(Θ) and JCV(Θ) will be high. Also, $J_{CV}(Θ)≈J_\text{train}(Θ)$.
-
-**High variance (overfitting)**: $J_\text{train}(Θ)$ will be low and $J_{CV}(Θ)$ will be much greater than $J_\text{train}(Θ)$.
-
-The is represented in the figure below:
-
-![yPz7yntYEeam4BLcQYZr8Q_07e80cbb290293d193f3cd92f1148e16_300px-Features-and-polynom-degree](images/Week 6/yPz7yntYEeam4BLcQYZr8Q_07e80cbb290293d193f3cd92f1148e16_300px-Features-and-polynom-degree.png)
-
 # Regularization and Bias/Variance
+
+**Context question:** How does regularization affect Bias/Variance?
 
 Instead of looking at the degree d contributing to bias/variance, now we will look at the regularization parameter λ.
 
-- Large λ: High bias (underfitting)
-- Intermediate λ: just right
 - Small λ: High variance (overfitting)
+- Intermediate λ: just right
+- Large λ: High bias (underfitting)
 
 A large lambda heavily penalizes all the $Θ$ parameters, which greatly simplifies the line of our resulting function, so causes underfitting.
 
-The relationship of λ to the training set and the variance set is as follows:
+![1502041113268](images/Week 6/1502041113268.png)
 
-**Low λ**: $J_\text{train}(Θ)$ is low and $J_{CV}(Θ)$ is high (high variance/overfitting).
+The relationship of $λ$ to the training set and the variance set is as follows:
 
-**Intermediate λ**: $J_\text{train}(Θ)$ and $J_{CV}(Θ)$ are somewhat low and $J_\text{train}(Θ)≈J_{CV}(Θ)$.
-
-**Large λ**: both $J_\text{train}(Θ)$ and $J_{CV}(Θ)$ will be high (underfitting /high bias)
+* **Low λ**: $J_\text{train}(Θ)$ is low and $J_{CV}(Θ)$ is high (high variance/overfitting).
+* **Intermediate λ**: $J_\text{train}(Θ)$ and $J_{CV}(Θ)$ are somewhat low and $J_\text{train}(Θ)≈J_{CV}(Θ)$.
+* **Large λ**: both $J_\text{train}(Θ)$ and $J_{CV}(Θ)$ will be high (underfitting /high bias)
 
 The figure below illustrates the relationship between lambda and the hypothesis:
 
 ![8K3a0XtZEealOA67wFuqoQ_fb209643920cb669170dfe96a19e2b00_300px-Features-and-polynom-degree-fix](images/Week 6/8K3a0XtZEealOA67wFuqoQ_fb209643920cb669170dfe96a19e2b00_300px-Features-and-polynom-degree-fix.png)
 
-In order to choose the model and the regularization λ, we need:
+In order to choose the *model* and the *regularization λ*, we need:
 
-1. Create a list of lambdas (i.e. λ∈{0,0.01,0.02,0.04,0.08,0.16,0.32,0.64,1.28,2.56,5.12,10.24});
+1. Create a list of lambdas (i.e. $λ∈{(0,0.01,0.02,0.04,0.08,0.16,0.32,0.64,1.28,2.56,5.12,10.24)}$);
 2. Create a set of models with different degrees or any other variants.
-3. Iterate through the $λ$s and for each $λ$ go through all the models to learn some Θ.
-4. Compute the cross validation error using the learned $Θ$ (computed with $λ$) on the $J_{CV}(Θ)$ without regularization or $λ = 0$.
+3. Iterate through the $λ$s and for each $λ$ go through all the models to learn some $Θ$.
+4. Compute the cross validation error using the learned $Θ$ (computed with $λ$) on the $J_{CV}(Θ)$ **without regularization or** $λ = 0$.
 5. Select the best combo that produces the lowest error on the cross validation set.
 6. Using the best combo $Θ$ and $λ$, apply it on $J_\text{test}(Θ)$ to see if it has a good generalization of the problem.
 
+## NOTE: Calculating the cost functions for regression
+
+While the cost function used to find the optimal $\theta$ values is:
+
+![1502041357094](images/Week 6/1502041357094.png)
+
+When we calculate the cost error values:
+
+![1502041394252](images/Week 6/1502041394252.png)
+
 # Learning Curves
+
+**Context:** 
+
+* If you wanted to sanity check that your algorithm is working correctly, or if you want to improve the performance of the algorithm. 
+* It is a tool to diagnose if a learning algorithm may be suffering from bias or variance problem or a bit of both. 
+
+**Core Idea:**
+
+When training set $n$ is small, its very easy to fit those points, the consequence of this is that your training error will also be small.  When $n$ is big it becomes harder for all the data to be fitted perfectly, the consequence of this is that your training error is likely to be larger. The converse will be true for when the cross validation error is looked at. 
+
+![1502042669841](images/Week 6/1502042669841.png)
+
+**Example:**
 
 Training 3 examples will easily have 0 errors because we can always find a quadratic curve that exactly touches 3 points.
 
 - As the training set gets larger, the error for a quadratic function increases.
 - The error value will plateau out after a certain m, or training set size.
 
-**With high bias**
-
-**Low training set size**: causes $J_\text{train}(Θ)$ to be low and $J_{CV}(Θ)$ to be high.
-
-**Large training set size**: causes both $J_\text{train}(Θ)$ and $J_{CV}(Θ)$ to be high with $J_\text{train}(Θ)≈J_{CV}(Θ)$.
-
-If a learning algorithm is suffering from **high bias**, getting more training data **will not (by itself) help much**.
-
-For high variance, we have the following relationships in terms of the training set size:
-
-**With high variance**
-
-**Low training set size**: $J_\text{train}(Θ)$ will be low and $J_{CV}(Θ)$ will be high.
-
-**Large training set size**: $J_\text{train}(Θ)$ increases with training set size and $J_{CV}(Θ)$ continues to decrease without leveling off. Also, $J_\text{train}(Θ)<J_{CV}(Θ)$ but the difference between them remains significant.
-
-If a learning algorithm is suffering from **high variance**, getting more training data is **likely to help.**
+##### With high bias
 
 ![img](images/Week 6/58yAjHteEeaNlA6zo4Pi2Q_9f0aa85680aff49e1624155c277bb926_300px-Learning2.png)
 
+* **Low training set size**: causes $J_\text{train}(Θ)$ to be low and $J_{CV}(Θ)$ to be high.
+* **Large training set size**: causes both $J_\text{train}(Θ)$ and $J_{CV}(Θ)$ to be high with $J_\text{train}(Θ)≈J_{CV}(Θ)$.
+
+==NOTE== If a learning algorithm is suffering from **high bias**, getting more training data **will not (by itself) help much**.
+
+For high variance, we have the following relationships in terms of the training set size:
+
+##### With high variance
+
 ![ITu3antfEeam4BLcQYZr8Q_37fe6be97e7b0740d1871ba99d4c2ed9_300px-Learning1](images/Week 6/ITu3antfEeam4BLcQYZr8Q_37fe6be97e7b0740d1871ba99d4c2ed9_300px-Learning1.png)
+
+* **Low training set size**: $J_\text{train}(Θ)$ will be low and $J_{CV}(Θ)$ will be high.
+* **Large training set size**: $J_\text{train}(Θ)$ increases with training set size and $J_{CV}(Θ)$ continues to decrease without leveling off. Also, $J_\text{train}(Θ)<J_{CV}(Θ)$ but the difference between them remains significant.
+
+==NOTE== If a learning algorithm is suffering from **high variance**, getting more training data is **likely to help.**
 
 # Deciding What to Do Next Revisited
 
 Our decision process can be broken down as follows:
 
-- Getting more training examples
+- Getting more training examples: Fixes high variance
 
-Fixes high variance
 
-- Trying smaller sets of features
+- Trying smaller sets of features: Fixes high variance
 
-Fixes high variance
 
-- Adding features
+- Adding features: Fixes high bias
 
-Fixes high bias
 
-- Adding polynomial features
+- Adding polynomial features: Fixes high bias
 
-Fixes high bias
 
-- Decreasing λ
+- Decreasing λ: Fixes high bias
 
-Fixes high bias
 
-- Increasing λ
-
-Fixes high variance
+- Increasing λ: Fixes high variance
 
 ## Diagnosing Neural Networks
 
 - A neural network with fewer parameters is **prone to underfitting**. It is also **computationally cheaper**.
 - A large neural network with more parameters is **prone to overfitting**. It is also **computationally expensive**. In this case you can use regularization (increase λ) to address the overfitting.
 
-Using a single hidden layer is a good starting default. You can train your neural network on a number of hidden layers using your cross validation set.
+Using a single hidden layer is a good starting default. You can train your neural network on a number of hidden layers using your *cross validation set.*
+
+### Some extra notes:
+
+The behavior of Neural Networks is very similar to the regression example when looking at the polynomial degree $d$ 
+
+![yPz7yntYEeam4BLcQYZr8Q_07e80cbb290293d193f3cd92f1148e16_300px-Features-and-polynom-degree](images/Week 6/yPz7yntYEeam4BLcQYZr8Q_07e80cbb290293d193f3cd92f1148e16_300px-Features-and-polynom-degree.png)
+
+If $J_\text{CV} >> J_\text{test}$, the NN is overfitting (high variance), the consequence of this is that adding more hidden layers will not improve performance. 
+
+If $J_\text{CV}  ≈ J_\text{test}$, the NN is underfitting (high bias), the consequence of this is that adding more hidden layers will likely improve performance. 
 
 ## Model Selection:
 
@@ -339,7 +414,10 @@ In order to turn these two metrics into one single number, we can take the **F v
 
 One way is to take the **average**:
 
-$\frac{P+R}{2}$
+$$
+\frac{P+R}{2}
+$$
+
 
 This does not work well. If we predict all y=0 then that will bring the average up despite having 0 recall. If we predict all examples as y=1, then the very high recall will bring up the average despite having 0 precision.
 
