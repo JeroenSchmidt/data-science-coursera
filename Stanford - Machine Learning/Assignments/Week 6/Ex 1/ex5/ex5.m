@@ -115,6 +115,7 @@ title('Learning curve for linear regression')
 legend('Train', 'Cross Validation')
 xlabel('Number of training examples')
 ylabel('Error')
+
 axis([0 13 0 150])
 
 fprintf('# Training Examples\tTrain Error\tCross Validation Error\n');

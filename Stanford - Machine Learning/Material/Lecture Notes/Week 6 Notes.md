@@ -75,6 +75,7 @@ With a given dataset of training examples, we can split up the data into two set
 
 
 
+
 This gives us a binary 0 or 1 error result based on a misclassification.
 
 The average test error for the test set is
@@ -258,12 +259,11 @@ Our decision process can be broken down as follows:
 
 
 - Adding polynomial features: Fixes high bias
+- Add regularization to model: Fixes high variance  / high bias
 
+  - Decreasing λ: Fixes high bias
 
-- Decreasing λ: Fixes high bias
-
-
-- Increasing λ: Fixes high variance
+  - Increasing λ: Fixes high variance
 
 ## Diagnosing Neural Networks
 
