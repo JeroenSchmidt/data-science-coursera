@@ -39,7 +39,7 @@ This new function will be defined as follows:
 
 ![67xwSHtkEeam4BLcQYZr8Q_1877395fcce3436991415c70ed819461_Svm_hing](images/Week 7/67xwSHtkEeam4BLcQYZr8Q_1877395fcce3436991415c70ed819461_Svm_hing.png)
 
-**2)** We consider $y=0$, all that remains is the first term of the cost function  $−\log(1−h_θ(x))=−\log(1−\frac{1}{1+e−θ^Tx})$ We will now modify it:
+**2)** We consider $y=0$, all that remains is the first term of the cost function $-\log(1-h_{\theta}(x)) = -\log\Big(1-\dfrac{1}{1 + e^{-\theta^Tx}}\Big)$. We will now modify it:
 
 This new function will be defined as follows:
 
@@ -96,7 +96,7 @@ This is equivalent to multiplying the equation by $C=\dfrac{1}{λ}$, and thus re
 
 The hypothesis of the Support Vector Machine is *not* interpreted as the probability of y being 1 or 0 (as it is for the hypothesis of logistic regression). Instead, it outputs either 1 or 0. (In technical terms, it is a **discriminant function**.)
 $$
-h_\theta(x) =\begin{cases}    1 & \text{if} \ \Theta^Tx \geq 0 \\    0 & \text{otherwise}\end{cases}
+h_\theta(x) =\begin{cases}    1 & \text{if} \ \theta^Tx \geq 0 \\    0 & \text{otherwise}\end{cases}
 $$
 
 # Large Margin Intuition
@@ -218,68 +218,109 @@ But recall that we are minimizing  $\dfrac{1}{2}||\theta ||^2$, so our optimal s
 
 If $Θ_0=0$, then all our decision boundaries will intersect (0,0). If $Θ_0≠0$, the support vector machine will still find a large margin for the decision boundary.
 
-# Kernels I
+# Kernels 
 
 **Kernels** allow us to make complex, non-linear classifiers using Support Vector Machines.
 
 Given x, compute new feature depending on proximity to landmarks $l(1), l(2), l(3)$.
 
-To do this, we find the "similarity" of x and some landmark $l^{(i)}$:
+To do this, we find the "similarity" of $x$ and some landmark $l^{(i)}$:
 
 $$
 f_i = \text{similarity}(x, l^{(i)}) = \exp(-\dfrac{||x - l^{(i)}||^2}{2\sigma^2})
 $$
-This "similarity" function is called a **Gaussian Kernel**. It is a specific example of a kernel.
+This *"similarity" function* is called a **Gaussian Kernel**. It is a specific example of a kernel.
 
 The similarity function can also be written as follows:
 $$
 f_i = \text{similarity}(x, l^{(i)}) = \exp(-\dfrac{\sum^n_{j=1}(x_j-l_j^{(i)})^2}{2\sigma^2})
 $$
-There are a couple properties of the similarity function:
+## Properties 
 
-If $x≈l(i)$, then $f_i = \exp(-\dfrac{\approx 0^2}{2\sigma^2}) \approx 1$
-
-If $x$ is far from $l(i)$, then $f_i = \exp(-\dfrac{(large\ number)^2}{2\sigma^2}) \approx 0$
+* If $x≈l(i)$, then $f_i = \exp(-\dfrac{\approx 0^2}{2\sigma^2}) \approx 1$
+* If $x$ is far from $l(i)$, then $f_i = \exp(-\dfrac{(large\ number)^2}{2\sigma^2}) \approx 0$
 
 In other words, if x and the landmark are close, then the similarity will be close to 1, and if x and the landmark are far away from each other, the similarity will be close to 0.
 
 Each landmark gives us the features in our hypothesis:
 $$
-\begin{align*}l^{(1)} \rightarrow f_1 \newline l^{(2)} \rightarrow f_2 \newline l^{(3)} \rightarrow f_3 \newline\dots \newline h_\Theta(x) = \Theta_1f_1 + \Theta_2f_2 + \Theta_3f_3 + \dots\end{align*}
+\begin{align*}l^{(1)} \rightarrow f_1 \newline l^{(2)} \rightarrow f_2 \newline l^{(3)} \rightarrow f_3 \newline\dots \newline h_\theta(x) = \theta_1f_1 + \theta_2f_2 + \theta_3f_3 + \dots\end{align*}
 $$
-$σ^2$ is a parameter of the Gaussian Kernel, and it can be modified to increase or decrease the **drop-off** of our feature $f_i$. Combined with looking at the values inside $Θ$, we can choose these landmarks to get the general shape of the decision boundary.
+### $σ^2$ parameter 
 
-# Kernels II
+$\sigma$ can be modified to increase or decrease the **drop-off** of our feature $f_i$. Combined with looking at the values inside $\theta$ we can choose these landmarks to get the general shape of the decision boundary.
+
+![1502810777288](images/Week 7/1502810777288.png)
+
+
+
+**NOTE:** 
+
+* When the sigma increases, the corresponding penalty to each misclassification would be less significant. i.e. it is not as discriminating in separating points that are farther from a landmark compared to when the sigma is low
+
+## Landmarks
 
 One way to get the landmarks is to put them in the **exact same** locations as all the training examples. **This gives us *$m$ landmarks*, with one landmark per training example.**
 
-Given example x:
+**NOTE:** This means that for training set of size $m$ our parameters $\theta\in R^ m\because f^{(i)}\in R^m$ 
+
+**Given example x:**
 
 $f_1 = \text{similarity}(x,l^{(1)})$, $f_2 = \text{similarity}(x,l^{(2)})$, $f_3 = \text{similarity}(x,l^{(3)})$ and so on.
 
-This gives us a ***"feature vector,"*** $f_{(i)}$ of all our features for example $x_{(i)}$. We may also set $f_0=1$ to correspond with $Θ_0$. Thus given training example $x_{(i)}$:
+This gives us a ***"feature vector,"*** $f_{(i)}$ of all our features for example $x_{(i)}$. We may also set $f_0=1$ to correspond with $\theta_0$. Thus given training example $x^{(i)}$:
 $$
 x^{(i)} \rightarrow \begin{bmatrix}f_1^{(i)} = similarity(x^{(i)}, l^{(1)}) \newline f_2^{(i)} = similarity(x^{(i)}, l^{(2)}) \newline\vdots \newline f_m^{(i)} = similarity(x^{(i)}, l^{(m)}) \newline\end{bmatrix}
 $$
-Now to get the parameters Θ we can use the SVM minimization algorithm but with $f^{(i)}$ substituted in for $x^{(i)}$:
+**Self pseudo NOTE:** In other words the Gaussian kernel is going to give us some value corresponding to how close training example $x^{(i)}$ is to all the other data (think of it as telling us how close or far the training example is from the body ("cluster") of all the other training examples). 
 
+### Working with the cost function:
+
+Now to get the parameters $\theta$ we can use the SVM minimization algorithm but with $f^{(i)}$ substituted in for $x^{(i)}$:
 $$
-\min_{\Theta} C \sum_{i=1}^m y^{(i)}\text{cost}_1(\Theta^Tf^{(i)}) + (1 - y^{(i)})\text{cost}_0(\theta^Tf^{(i)}) + \dfrac{1}{2}\sum_{j=1}^n \Theta^2_j
+\min_{\Theta} C \sum_{i=1}^m y^{(i)}\text{cost}_1(\Theta^Tf^{(i)}) + (1 - y^{(i)})\text{cost}_0(\theta^Tf^{(i)}) + \dfrac{1}{2}\sum_{j=1}^n \theta^2_j
 $$
+Predictions:
+
+* Predict $y=1$ if $\theta^Tf\geq0$
+
 Using kernels to generate $f^{(i)}$ is not exclusive to SVMs and may also be applied to logistic regression. However, because of computational optimizations on SVMs, kernels combined with SVMs is much faster than with other algorithms, so kernels are almost always found combined only with SVMs.
+
+**Side note:**
+
+We can vectorise the regularization term
+$$
+\sum_{j=1}^n \theta^2_j = \theta^T\theta \text{ ignore } \theta_0
+$$
+We can modify the regularization term even more to *account for large training sets* (recall remark earlier about $\theta$s size w.r.t # of landmarks): 
+$$
+\sum_{j=1}^n \theta^2_j = \theta^TM\theta \text{ ignore } \theta_0 \\
+\text{where } M
+$$
+
+
+# Final Comments on SVM
 
 ### **Choosing SVM Parameters**
 
-Choosing $C$ (recall that $C=\dfrac{1}{λ}$
+*Recall: underfiting / overfitting*
 
-- If C is large, then we get higher variance/lower bias
-- If C is small, then we get lower variance/higher bias
+![1502040245805](images/Week 6/1502040245805.png)
 
-The other parameter we must choose is $σ^2$ from the Gaussian Kernel function:
+1) Choosing $C$ (recall that $C=\dfrac{1}{λ}$)
 
-With a large $σ^2$, the features fi vary more smoothly, causing higher bias and lower variance.
+- If C is large (small $\lambda$), then we get higher variance/lower bias
+- If C is small (large $\lambda$), then we get lower variance/higher bias
 
-With a small $σ^2$, the features $f^{(i)}$ vary less smoothly, causing lower bias and higher variance.
+2) Choosing $σ^2$ from the Gaussian Kernel function:
+
+* Large $σ^2$, the features $f^{(i)}$ vary more smoothly, causing **higher bias** and **lower variance** .
+
+![1502814150081](images/Week 7/1502814150081.png)
+
+* Small $σ^2$, the features $f^{(i)}$ vary less smoothly, causing **lower bias** and **higher variance**.
+
+![1502814162226](images/Week 7/1502814162226.png)
 
 **Using An SVM**
 
