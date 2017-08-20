@@ -23,11 +23,35 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+attemptsC = [0.01 10 0.1 0.3 1 3 10 30];
+attemptsSigma = [0.01 10 0.1 0.3 1 3 10 30];
+results = [];
 
+x1 = X(:,1);
+x2 = X(:,2);
 
+for cLoop = attemptsC
+  for signalLoop = attemptsSigma
 
+    model = svmTrain(X, y, cLoop, @(x1, x2) gaussianKernel(x1, x2, signalLoop)); 
 
+    cvPredictions = svmPredict(model,Xval);
+    cvError = mean(double(cvPredictions ~= yval));
 
+    results = [results;cvError cLoop signalLoop] ;
+  end
+end
+
+[M I] = min(results);
+
+index = I(1);
+
+bestConfiguration = results(index,:)
+
+C = bestConfiguration(2);
+sigma = bestConfiguration(3);
+
+[C, sigma]
 
 % =========================================================================
 

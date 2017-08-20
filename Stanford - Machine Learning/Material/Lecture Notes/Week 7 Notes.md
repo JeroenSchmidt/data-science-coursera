@@ -216,7 +216,7 @@ But recall that we are minimizing  $\dfrac{1}{2}||\theta ||^2$, so our optimal s
 
 ![1502731823054](images/Week 7/1502731823054.png)
 
-If $Θ_0=0$, then all our decision boundaries will intersect (0,0). If $Θ_0≠0$, the support vector machine will still find a large margin for the decision boundary.
+If $\theta_0=0$, then all our decision boundaries will intersect (0,0). If $\theta_0≠0$, the support vector machine will still find a large margin for the decision boundary.
 
 # Kernels 
 
@@ -235,6 +235,11 @@ The similarity function can also be written as follows:
 $$
 f_i = \text{similarity}(x, l^{(i)}) = \exp(-\dfrac{\sum^n_{j=1}(x_j-l_j^{(i)})^2}{2\sigma^2})
 $$
+Another kernel is the ***linear kernel*** (no kernel)
+$$
+y=1 \text{ if } \theta^Tx\geq0
+$$
+
 ## Properties 
 
 * If $x≈l(i)$, then $f_i = \exp(-\dfrac{\approx 0^2}{2\sigma^2}) \approx 1$
@@ -257,6 +262,14 @@ $\sigma$ can be modified to increase or decrease the **drop-off** of our feature
 **NOTE:** 
 
 * When the sigma increases, the corresponding penalty to each misclassification would be less significant. i.e. it is not as discriminating in separating points that are farther from a landmark compared to when the sigma is low
+
+## Feature Scaling
+
+Make sure to use feature scaling as the order of magnitude of our features will unfairly skew the Gaussian results. 
+
+**Example:** the first term of the Cartesian distance expansion will dominate all the other terms.
+
+![1503005046629](images/Week 7/1503005046629.png)
 
 ## Landmarks
 
@@ -343,21 +356,66 @@ The library may ask you to provide the kernel function.
 
 You want to train C and the parameters for the kernel function using the training and cross-validation datasets.
 
-### **Multi-class Classification**
+# SVMs in Practice
+
+## Implementing the SVM
+
+Use SVM software packages to solve $\theta$. e.g. `liblinear` , `libsvm`
+
+**Need to specify:**
+
+* Choice of parameter C
+* Choice of kernel
+  * Choice of $\sigma^2$ for Gaussian kernels 
+
+### Kernels
+
+**When selecting a kernel:**
+
+Not all similarity functions make valid kernels. Needs to satisfy Mercers Theorem to make sure SVM packages optimization runs correctly and do not diverge. 
+
+**Types:**
+
+* polynomial kernel 
+  * $(x^Tl+c)^d$ 
+  * mostly used where data where x and l are non-negative
+* String kernel
+* Chai-square kernel
+* Histogram intersection kernel 
+
+## **Multi-class Classification**
 
 Many SVM libraries have multi-class classification built-in.
 
-You can use the *one-vs-all* method just like we did for logistic regression, where $y∈1,2,3,…,K$ with $\Theta^{(1)}, \Theta^{(2)}, \dots,\Theta{(K)}$. We pick class i with the largest $(\Theta^{(i)})^Tx$.
+You can use the *one-vs-all* method just like we did for logistic regression, where $y∈1,2,3,…,K$ with $\theta^{(1)}, \theta^{(2)}, \dots,\theta^{(K)}$. We pick class $i$ with the largest $(\theta^{(i)})^Tx$.
 
-### **Logistic Regression vs. SVMs**
+![1503005396972](images/Week 7/1503005396972.png)
 
-If n is large (relative to m), then use logistic regression, or SVM without a kernel (the "linear kernel")
+## **Logistic Regression vs. SVMs** (when to use what)
 
-If n is small and m is intermediate, then use SVM with a Gaussian Kernel
+$$
+n = \text{ number of feature } (x\in R^{n+1}) \\
+m = \text{number of training examples}
+$$
 
-If n is small and m is large, then manually create/add more features, then use logistic regression or SVM without a kernel.
 
-In the first case, we don't have enough examples to need a complicated polynomial hypothesis. In the second example, we have enough examples that we may need a complex non-linear hypothesis. In the last case, we want to increase our features so that logistic regression becomes applicable.
+
+If $n$ is large (relative to $m$), then 
+
+* *use logistic regression*
+* or *SVM without a kernel* (the "linear kernel")
+* i.e. we don't have enough examples to need a complicated polynomial hypothesis. 
+
+If $n$ is small and $m$ is intermediate, 
+
+* SVM with a *Gaussian Kernel*
+* i.e. we have enough examples that we may need a complex non-linear hypothesis. 
+
+If $n$ is small and $m$ is large, 
+
+* manually create/add more features
+* and use logistic regression or SVM without a kernel.
+* i.e. we want to increase our features so that logistic regression becomes applicable.
 
 **Note**: a neural network is likely to work well for any of these situations, but may be slower to train.
 
