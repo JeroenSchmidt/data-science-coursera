@@ -1,12 +1,20 @@
+---
+typora-copy-images-to: images\Week 8
+---
+
 # Week 8 Lecture Notes
 
 # ML:Clustering
+
+[TOC]
 
 # Unsupervised Learning: Introduction
 
 Unsupervised learning is contrasted from supervised learning because it uses an **unlabeled** training set rather than a labeled one.
 
-In other words, we don't have the vector y of expected results, we only have a dataset of features where we can find structure.
+In other words, we don't have the vector $y$ of expected results, we only have a dataset of features where we can find structure.
+
+![1503590323571](images/Week 8/1503590323571.png)
 
 Clustering is good for:
 
@@ -19,10 +27,12 @@ Clustering is good for:
 
 The K-Means Algorithm is the most popular and widely used algorithm for automatically grouping data into coherent subsets.
 
-1. Randomly initialize two points in the dataset called the *cluster centroids*.
+```
+1. Randomly initialize two points in the dataset called the cluster centroids.
 2. Cluster assignment: assign all examples into one of two groups based on which cluster centroid the example is closest to.
 3. Move centroid: compute the averages for all the points inside each of the two cluster centroid groups, then move the cluster centroid points to those averages.
 4. Re-run (2) and (3) until we have found our clusters.
+```
 
 Our main variables are:
 
@@ -30,7 +40,7 @@ Our main variables are:
 - Training set ${x^{(1)}, x^{(2)}, \dots,x^{(m)}}$
 - Where $x^{(i)}∈R^n$
 
-Note that we **will not use** the x0=1 convention.
+Note that we **will not use** the $x_0=1$ convention.
 
 **The algorithm:**
 
@@ -41,19 +51,17 @@ Repeat:
       c(i):= index (from 1 to K) of cluster centroid closest to x(i)
    for k = 1 to K:
       mu(k):= average (mean) of points assigned to cluster k
-
-
-
-
-
 ```
 
-The **first for-loop** is the 'Cluster Assignment' step. We make a vector *c* where *c(i)* represents the centroid assigned to example *x(i)*.
+## Algorithm Run though
+
+**1)** **first for-loop** is the 'Cluster Assignment' step. We make a vector $c$ where $c(i)$ represents the centroid assigned to example $x(i)$.
 
 We can write the operation of the Cluster Assignment step more mathematically as follows:
 
-$c^{(i)}=\text{argmin}_k ||x(i)−μk||^2$
-
+$$
+c^{(i)}=\text{argmin}_k ||x(i)−μk||^2
+$$
 That is, each $c^{(i)}$ contains the index of the centroid that has minimal distance to $x^{(i)}$.
 
 By convention, we square the right-hand-side, which makes the function we are trying to minimize more sharply increasing. It is mostly just a convention. But a convention that helps reduce the computation load because the Euclidean distance requires a square root but it is canceled.
@@ -66,9 +74,9 @@ With the square:
 $$
 ||x^{(i)} - \mu_k||^2 = ||\quad(x_1^i - \mu_{1(k)})^2 + (x_2^i - \mu_{2(k)})^2 + (x_3^i - \mu_{3(k)})^2 + ...\quad||
 $$
-...so the square convention serves two purposes, minimize more sharply and less computation.
+...so the square convention serves two purposes, minimize more sharply and less computation.****
 
-The **second for-loop** is the 'Move Centroid' step where we move each centroid to the average of its group.
+**2)** The **second for-loop** is the 'Move Centroid' step where we move each centroid to the average of its group.
 
 More formally, the equation for this loop is as follows:
 $$
@@ -82,15 +90,46 @@ After a number of iterations the algorithm will **converge**, where new iteratio
 
 Note on non-separated clusters: some datasets have no real inner separation or natural structure. K-means can still evenly segment your data into K subsets, so can still be useful in this case.
 
+## Visual Example:
+
+***Iteration 1***
+
+**Initial State - assign data points to closest centroids**
+
+![1503590356271](images/Week 8/1503590356271.png)
+
+**Move Centroids**
+
+![1503590393790](images/Week 8/1503590393790.png)
+
+***Iteration 2***
+
+**Reassign data points to new centroids**
+
+![1503590477523](images/Week 8/1503590477523.png)
+
+**Move Centroids**
+
+![1503590537235](images/Week 8/1503590537235.png)
+
+***...Eventually you get it into the final state***
+
+![1503590972598](images/Week 8/1503590972598.png)
+
 # Optimization Objective
 
 Recall some of the parameters we used in our algorithm:
 
-- $c^{(i)}$ = index of cluster $(1,2,...,K)$ to which example x(i) is currently assigned
+- $c^{(i)}$ = index of cluster $(1,2,...,K)$ to which example $x^{(i)}$ is currently assigned
+  - $c$ is a vector of cluster index numbers whos position corresponds to data point $i$ 
 - $μ_k$= cluster centroid k ($μ_k∈ℝ^n$)
-- $μ_{c^{(i)}}$ = cluster centroid of cluster to which example x(i) has been assigned
+- $μ_{c^{(i)}}$ = cluster centroid of cluster to which example $x^{(i)}$ has been assigned
 
-Using these variables we can define our **cost function**:
+*Incase of confusion with notation*
+
+![1503591029173](images/Week 8/1503591029173.png)
+
+Using these variables we can define our **cost function**: (*Distortion*)
 $$
 J(c^{(i)},\dots,c^{(m)},\mu_1,\dots,\mu_K) = \dfrac{1}{m}\sum_{i=1}^m ||x^{(i)} - \mu_{c^{(i)}}||^2
 $$
@@ -110,14 +149,14 @@ In the **move centroid** step, our goal is to:
 
 Minimize $J(…)$ with $μ_1,…,μ_K$
 
-With k-means, it is **not possible for the cost function to sometimes increase**. It should always descend.
+**NOTE:**  k-means, it is **not possible for the cost function to sometimes increase**. It should always descend.
 
 # Random Initialization
 
 There's one particular recommended method for randomly initializing your cluster centroids.
 
 1. Have $K<m$. That is, make sure the number of your clusters is less than the number of your training examples.
-2. Randomly pick K training examples. (Not mentioned in the lecture, but also be sure the selected examples are unique).
+2. Randomly pick $K$ training examples. (Not mentioned in the lecture, but also be sure the selected examples are unique).
 3. Set $μ_1,…,μ_K$ equal to these K examples.
 
 K-means **can get stuck in local optima**. To decrease the chance of this happening, you can run the algorithm on many different random initializations. In cases where K<10 it is strongly recommended to run a loop of random initializations.
@@ -132,15 +171,25 @@ pick the clustering that gave us the lowest cost
 
 # Choosing the Number of Clusters
 
-Choosing K can be quite arbitrary and ambiguous.
+Choosing $K$ can be quite arbitrary and ambiguous.
 
 **The elbow method**: plot the cost J and the number of clusters K. The cost function should reduce as we increase the number of clusters, and then flatten out. Choose K at the point where the cost function starts to flatten out.
 
+![1503590147594](images/Week 8/1503590147594.png)
+
 However, fairly often, the curve is **very gradual**, so there's no clear elbow.
 
-**Note:** J will **always** decrease as K is increased. The one exception is if k-means gets stuck at a bad local optimum.
+**Note:** $J$ will **always** decrease as K is increased. The one exception is if k-means gets stuck at a bad local optimum.
 
-Another way to choose K is to observe how well k-means performs on a **downstream purpose**. In other words, you choose K that proves to be most useful for some goal you're trying to achieve from using these clusters.
+![1503590159992](images/Week 8/1503590159992.png)
+
+Another way to choose $K$ is to observe how well k-means performs on a **downstream purpose**. In other words, you choose K that proves to be most useful for some goal you're trying to achieve from using these clusters.
+
+*Example:*
+
+T-shirt company and you want to segment the market into either 3 or 5 markets but you dont know what data points fall into which segment. 
+
+![1503590256337](images/Week 8/1503590256337.png)
 
 # Bonus: Discussion of the drawbacks of K-Means
 
@@ -155,7 +204,9 @@ This links to a discussion that shows various situations in which K-means gives 
 
 Doing dimensionality reduction will reduce the total data we have to store in computer memory and will speed up our learning algorithm.
 
-Note: in dimensionality reduction, we are reducing our features rather than our number of examples. Our variable m will stay the same size; n, the number of features each example from $x^{(1)}$ to $x^{(m)}$ carries, will be reduced.
+**Note:** In dimensionality reduction, we are reducing our features rather than our number of examples. Our variable m will stay the same size; n, the number of features each example from $x^{(1)}$ to $x^{(m)}$ carries, will be reduced.
+
+![1503591486011](images/Week 8/1503591486011.png)
 
 ### **Motivation II: Visualization**
 
@@ -165,6 +216,20 @@ We need to find new features, $z_1$,$z_2$(and perhaps $z_3$) that can effectivel
 
 **Example**: hundreds of features related to a country's economic system may all be combined into one feature that you call "Economic Activity."
 
+![1503591536042](images/Week 8/1503591536042.png)
+
+
+
+***Decomposed into***
+
+
+
+![1503591560723](images/Week 8/1503591560723.png)
+
+***Which can be visualized as***
+
+![1503591596413](images/Week 8/1503591596413.png)
+
 # Principal Component Analysis Problem Formulation
 
 The most popular dimensionality reduction algorithm is *Principal Component Analysis* (PCA)
@@ -173,7 +238,11 @@ The most popular dimensionality reduction algorithm is *Principal Component Anal
 
 Given two features, $x_1$ and $x_2$, we want to find a single line that effectively describes both features at once. We then map our old features onto this new line to get a new single feature.
 
+![1503591677745](images/Week 8/1503591677745.png)
+
 The same can be done with three features, where we map them to a plane.
+
+![1503591705377](images/Week 8/1503591705377.png)
 
 The **goal of PCA** is to **reduce** the average of all the distances of every feature to the projection line. This is the **projection error**.
 
@@ -185,7 +254,7 @@ Reduce from n-dimension to k-dimension: Find k vectors $u^{(1)},u^{(2)},…,$$u^
 
 If we are converting from 3d to 2d, we will project our data onto two directions (a plane), so k will be 2.
 
-**PCA is not linear regression**
+**NOTE: PCA is not linear regression**
 
 - In linear regression, we are minimizing the **squared error** from every point to our predictor line. These are vertical distances.
 - In PCA, we are minimizing the **shortest distance**, or shortest *orthogonal* distances, to our data points.
@@ -273,7 +342,7 @@ We can do this with the equation: $x^{(1)}_\text{approx}=U_\text{reduce}⋅z^{(1
 
 Note that we can only get approximations of our original data.
 
-Note: It turns out that the U matrix has the special property that it is a Unitary Matrix. One of the special properties of a Unitary Matrix is:
+Note: It turns out that the $U$ matrix has the special property that it is a Unitary Matrix. One of the special properties of a Unitary Matrix is:
 
 $U^{−1}=U^∗$ where the "*" means  ***"conjugate transpose".***
 
@@ -281,11 +350,13 @@ Since we are dealing with real numbers here, this is equivalent to:
 
 $U^{−1}=U^T$ So we could compute the inverse and use that, but it would be a waste of energy and compute cycles.
 
+![1503591963379](images/Week 8/1503591963379.png)
+
 # Choosing the Number of Principal Components
 
-How do we choose k, also called the *number of principal components*? Recall that k is the dimension we are reducing to.
+How do we choose $k$, also called the *number of principal components*? Recall that k is the dimension we are reducing to.
 
-One way to choose k is by using the following formula:
+One way to choose $k$ is by using the following formula:
 
 - Given the average squared projection error: $\dfrac{1}{m}\sum^m_{i=1}||x^{(i)} - x_{approx}^{(i)}||^2$
 
@@ -295,6 +366,7 @@ One way to choose k is by using the following formula:
   $$
   \dfrac{\dfrac{1}{m}\sum^m_{i=1}||x^{(i)} - x_{approx}^{(i)}||^2}{\dfrac{1}{m}\sum^m_{i=1}||x^{(i)}||^2} \leq 0.01
   $$
+
 
 
 In other words, the squared projection error divided by the total variation should be less than one percent, so that **99% of the variance is retained**.
@@ -322,20 +394,21 @@ The most common use of PCA is to speed up supervised learning.
 
 Given a training set with a large number of features (e.g. $x^{(1)},\dots,x^{(m)} \in \mathbb{R}^{10000}$ ) we can use PCA to reduce the number of features in each example of the training set (e.g.$z^{(1)},\dots,z^{(m)} \in \mathbb{R}^{1000}$).
 
-Note that we should define the PCA reduction from $x^{(i)}$ to $z^{(i)}$ only on the training set and not on the cross-validation or test sets. You can apply the mapping $z^{(i)}$ to your cross-validation and test sets after it is defined on the training set.
+**Note** that we should define the PCA reduction from $x^{(i)}$ to $z^{(i)}$ only on the training set and not on the cross-validation or test sets. You can apply the mapping $z^{(i)}$ to your cross-validation and test sets after it is defined on the training set.
 
 Applications
 
 - Compressions
+- Reduce space of data
+- Speed up algorithm
 
-Reduce space of data
-
-Speed up algorithm
 
 - Visualization of data
 
 Choose $k = 2$ or $k = 3$
 
-**Bad use of PCA: **trying to prevent overfitting. We might think that reducing the features with PCA would be an effective way to address overfitting. It might work, but is not recommended because it does not consider the values of our results y. Using just regularization will be at least as effective.
+**Bad use of PCA: **
 
-Don't assume you need to do PCA. **Try your full machine learning algorithm without PCA first.** Then use PCA if you find that you need it.
+1) Trying to prevent overfitting. We might think that reducing the features with PCA would be an effective way to address overfitting. It might work, but is not recommended because it does not consider the values of our results y. Using just regularization will be at least as effective.
+
+2) Don't assume you need to do PCA. **Try your full machine learning algorithm without PCA first.** Then use PCA if you find that you need it.
