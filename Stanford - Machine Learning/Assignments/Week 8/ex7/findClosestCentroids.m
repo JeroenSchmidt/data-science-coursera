@@ -22,9 +22,30 @@ idx = zeros(size(X,1), 1);
 %
 
 
+% looping through the centroid locations and using vectorisation to avoid 
+% further nested loops
+m = length(X);
 
+k = 1; 
+idx = ones(m,1)*k;
 
+% Define a very large number 
+shortest_distance = ones(m,1)*100000000;
 
+for centroid = centroids'
+  centroid_vec = repmat(centroid',m,1);
+  distance_new = norm( X - centroid_vec , OPT="rows");
+  
+  closer_positions = distance_new < shortest_distance;
+  
+  idx(closer_positions) = k;   
+  shortest_distance(closer_positions) = distance_new(closer_positions);
+  
+  distance_old = distance_new;
+  k += 1;
+endfor
+
+idx;
 
 
 % =============================================================
