@@ -60,7 +60,7 @@ Repeat:
 We can write the operation of the Cluster Assignment step more mathematically as follows:
 
 $$
-c^{(i)}=\text{argmin}_k ||x(i)−μk||^2
+c^{(i)}=\text{argmin}_k ||x(i)−μ_k||^2
 $$
 That is, each $c^{(i)}$ contains the index of the centroid that has minimal distance to $x^{(i)}$.
 
@@ -278,6 +278,7 @@ $$
 
 - Replace each $x_j^{(i)}$ with $x_j^{(i)} - \mu_j$
 - If different features on different scales (e.g., x1 = size of house, x2 = number of bedrooms), scale features to have comparable range of values.
+- [NOTE on normalising and the mean of your features](https://stats.stackexchange.com/questions/22329/how-does-centering-the-data-get-rid-of-the-intercept-in-regression-and-pca)
 
 Above, we first subtract the mean of each feature from the original feature. Then we scale all the features $x_j^{(i)} = \dfrac{x_j^{(i)} - \mu_j}{s_j}$
 
@@ -313,7 +314,7 @@ Note that $x^{(i)}$ is an $n×1$ vector, $(x^{(i)})^T$ is an $1×n$ vector and $
 
 svd() is the 'singular value decomposition', a built-in Octave function.
 
-What we actually want out of svd() is the 'U' matrix of the Sigma covariance matrix: $U∈R^{n×n}$. U contains $u^{(1),…,u(n)}$, which is exactly what we want.
+What we actually want out of `svd()` is the '$U$' matrix of the Sigma covariance matrix: $U∈R^{n×n}$. $U$ contains $u^{(1),…,u(n)}$, which is exactly what we want.
 
 **3. Take the first k columns of the U matrix and compute z**
 
@@ -366,6 +367,7 @@ One way to choose $k$ is by using the following formula:
   $$
   \dfrac{\dfrac{1}{m}\sum^m_{i=1}||x^{(i)} - x_{approx}^{(i)}||^2}{\dfrac{1}{m}\sum^m_{i=1}||x^{(i)}||^2} \leq 0.01
   $$
+
 
 
 

@@ -18,7 +18,11 @@ Z = zeros(size(X, 1), K);
 %                    projection_k = x' * U(:, k);
 %
 
+# Create the reduction matrix
+U_reduce = U(:,1:K);
 
+# Compute the projected data points
+Z = X*U_reduce;
 
 
 % =============================================================

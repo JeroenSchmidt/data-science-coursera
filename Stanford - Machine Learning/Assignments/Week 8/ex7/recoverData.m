@@ -22,6 +22,11 @@ X_rec = zeros(size(Z, 1), size(U, 1));
 %               
 
 
+# Create the reduction matrix
+U_reduce = U(:,1:K);
+
+# Compute the recreated data points
+X_rec = Z*U_reduce';
 
 % =============================================================
 
