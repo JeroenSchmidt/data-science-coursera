@@ -250,7 +250,7 @@ Reduce from 2d to 1d: find a direction (a vector $u^{(1)}∈R^n$) onto which to 
 
 The more general case is as follows:
 
-Reduce from n-dimension to k-dimension: Find k vectors $u^{(1)},u^{(2)},…,$$u^{(k)}$ onto which to project the data so as to minimize the projection error.
+Reduce from n-dimension to k-dimension: Find $k$ vectors $u^{(1)},u^{(2)},…,$$u^{(k)}$ onto which to project the data so as to minimize the projection error.
 
 If we are converting from 3d to 2d, we will project our data onto two directions (a plane), so k will be 2.
 
@@ -259,7 +259,7 @@ If we are converting from 3d to 2d, we will project our data onto two directions
 - In linear regression, we are minimizing the **squared error** from every point to our predictor line. These are vertical distances.
 - In PCA, we are minimizing the **shortest distance**, or shortest *orthogonal* distances, to our data points.
 
-More generally, in linear regression we are taking all our examples in x and applying the parameters in Θ to predict y.
+More generally, in linear regression we are taking all our examples in x and applying the parameters in $\theta$ to predict $y$.
 
 In PCA, we are taking a number of features $x_1,x_2,…,x_n$, and finding a closest common dataset among them. We aren't trying to predict any result and we aren't applying any theta weights to the features.
 
@@ -312,17 +312,17 @@ Note that $x^{(i)}$ is an $n×1$ vector, $(x^{(i)})^T$ is an $1×n$ vector and $
 [U,S,V] = svd(Sigma);
 ```
 
-svd() is the 'singular value decomposition', a built-in Octave function.
+`svd()` is the 'singular value decomposition', a built-in Octave function.
 
-What we actually want out of `svd()` is the '$U$' matrix of the Sigma covariance matrix: $U∈R^{n×n}$. $U$ contains $u^{(1),…,u(n)}$, which is exactly what we want.
+What we actually want out of `svd()` is the '$U$' matrix of the Sigma covariance matrix: $U∈R^{n×n}$. $U$ contains $u^{(1),…,u(n)}$, which are the *eigenvectors* of the `sigam` matrix 
 
 **3. Take the first k columns of the U matrix and compute z**
 
-We'll assign the first k columns of U to a variable called $U_\text{reduce}$. This will be an $n×k$ matrix. We compute z with:
+We'll assign the first $k$ columns of U to a variable called $U_\text{reduce}$. This will be an $n×k$ matrix. We compute z with:
 
-$z(i)=U_\text{reduce}^T⋅x(i)$
-
-$U_\text{reduce}Z^T$ will have dimensions k×n while $x^{(i)}$ will have dimensions n×1. The product $U_\text{reduce}^T⋅x^{(i)}$ will have dimensions $k×1$.
+* $z(i)=U_\text{reduce}^T⋅x(i)$
+* $U_\text{reduce}Z^T$ will have dimensions k×n while $x^{(i)}$ will have dimensions n×1. 
+* The product $U_\text{reduce}^T⋅x^{(i)}$ will have dimensions $k×1$.
 
 To summarize, the whole algorithm in octave is roughly:
 
@@ -371,6 +371,7 @@ One way to choose $k$ is by using the following formula:
 
 
 
+
 In other words, the squared projection error divided by the total variation should be less than one percent, so that **99% of the variance is retained**.
 
 **Algorithm for choosing k**
@@ -385,7 +386,7 @@ This procedure would actually be horribly inefficient. In Octave, we will call s
 [U,S,V] = svd(Sigma)
 ```
 
-Which gives us a matrix S. We can actually check for 99% of retained variance using the S matrix as follows:
+Which gives us a matrix S, where the diagonal elements are the *eigenvalues* of the `sigma` matrix. We can actually check for 99% of retained variance using the S matrix as follows:
 $$
 \dfrac{\sum_{i=1}^kS_{ii}}{\sum_{i=1}^nS_{ii}} \geq 0.99
 $$
