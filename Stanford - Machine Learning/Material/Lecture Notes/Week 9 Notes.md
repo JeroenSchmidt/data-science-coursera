@@ -241,6 +241,8 @@ However, the original model maintains some advantages: it is computationally che
 
 # Problem Formulation
 
+**Core Idea: ** every user helps catalog movies 
+
 Recommendation is currently a very popular application of machine learning.
 
 Say we are trying to recommend movies to customers. We can use the following definitions
@@ -306,10 +308,8 @@ Using the feedback from our users we can then find the values for $x_1$ and $x_2
 To infer the features from given parameters, we use the squared error function with regularization over all the users:
 
 Given $\theta^{(1)},...,\theta^{(n)}$, to learn $x^{(1)},...,x^{(i)}$: (we are choosing the feature values $x$ to minimize the squared error of the cost function)
-$$
-min_{x^{(1)},\dots,x^{(n_m)}} \dfrac{1}{2} \displaystyle \sum_{i=1}^{n_m}  \sum_{j:r(i,j)=1} ((\theta^{(j)})^T x^{(i)} - y^{(i,j)})^2 + \dfrac{\lambda}{2}\sum_{i=1}^{n_m} \sum_{k=1}^{n} (x_k^{(i)})^2
-$$
-![1504541850655](images/Week 9/1504541850655.png)
+
+![1505749131887](images/Week 9/1505749131887.png)
 
 Out of the two variables $\theta$ and $x$, which one to we calculate first? and how do we calculate it if its dependent on the other?
 You can also **randomly guess** the values for $\theta$ to guess the features repeatedly. You will actually converge to a good set of features.
@@ -322,11 +322,11 @@ To speed things up, we can simultaneously minimize our features and our paramete
 $$
 J(x,\theta) = \dfrac{1}{2} \displaystyle \sum_{(i,j):r(i,j)=1}((\theta^{(j)})^Tx^{(i)} - y^{(i,j)})^2 + \dfrac{\lambda}{2}\sum_{i=1}^{n_m} \sum_{k=1}^{n} (x_k^{(i)})^2 + \dfrac{\lambda}{2}\sum_{j=1}^{n_u} \sum_{k=1}^{n} (\theta_k^{(j)})^2
 $$
-It looks very complicated, but we've only combined the cost function for theta and the cost function for x.
+It looks very complicated, but we've only combined the cost function for theta and the cost function for $x$.
 
-Because the algorithm can learn them itself, the bias units where x0=1 have been removed, therefore x∈ℝn and θ∈ℝn.
+**NOTE:** Because the algorithm can learn them itself, the bias units where $x_0=1$ have been removed, therefore $x∈ℝ^n$ and $θ∈ℝ^n$. This is possible because the algorithm is learning all its features, so if a feature equal to 1 is required the algorithm will produce it.
 
-These are the steps in the algorithm:
+**These are the steps in the algorithm:**
 
 1. Initialize $x^{(i)},...,x^{(n_m)},\theta^{(1)},...,\theta^{(n_u)}$ to small random values. This serves to break symmetry and ensures that the algorithm learns features $x^{(i)},...,x^{(n_m)}$ that are different from each other.
 
@@ -337,19 +337,52 @@ These are the steps in the algorithm:
    $$
    ​
 
-3. For a user with parameters θ and a movie with (learned) features x, predict a star rating of $θ^Tx$.
+3. For a user with parameters $θ$ and a movie with (learned) features $x$, predict a star rating of $θ^Tx$.
+
+**i.e** user $j$ has not rated movie $i$, we predict that user $j$ is going to rate movie $i$ according to: $(\theta^{(j)})^Tx^{(i)}$
+
+**Note:** there's no special case where $k=0$ because $x_0 = 1$ doesn't exist. 
 
 # Vectorization: Low Rank Matrix Factorization
 
-Given matrices X (each row containing features of a particular movie) and Θ (each row containing the weights for those features for a given user), then the full matrix Y of all predicted ratings of all movies by all users is given simply by: $Y = X\Theta^T$.
+Given matrices $X$ (each row containing features of a particular movie) and $Θ$ (each row containing the weights for those features for a given user), then the full matrix Y of all predicted ratings of all movies by all users is given simply by: $Y = X\Theta^T$.
 
-Predicting how similar two movies i and j are can be done using the distance between their respective feature vectors x. Specifically, we are looking for a small value of $||x^{(i)} - x^{(j)}||$.
+![1505750252131](images/Week 9/1505750252131.png)
+
+![1505750491115](images/Week 9/1505750491115.png)
+
+**Now define:**
+
+![1505750516163](images/Week 9/1505750516163.png)
+
+Then this lets us write $Y$ in vectoried form:
+$$
+\Theta^TX \\
+\text{or} \\
+X\Theta^T
+$$
+
+### Find related movies:
+
+For each product $i$, we learn a feature vector $x^{i}\in R$ 
+
+How to find movies $j$ related to movie $i$?
+
+Having learned the feature vectors. We can use the distance between their respective feature vectors x. Specifically, we are looking for a small value of $||x^{(i)} - x^{(j)}||$.
 
 # Implementation Detail: Mean Normalization
 
-If the ranking system for movies is used from the previous lectures, then new users (who have watched no movies), will be assigned new movies incorrectly. Specifically, they will be assigned θ with all components equal to zero due to the minimization of the regularization term. That is, we assume that the new user will rank all movies 0, which does not seem intuitively correct.
+If the ranking system for movies is used from the previous lectures, then new users (who have watched no movies), will be assigned new movies incorrectly. Specifically, they will be assigned $θ$ with all components equal to zero due to the minimization of the regularization term. **That is, we assume that the new user will rank all movies 0, which does not seem intuitively correct.**
 
-We rectify this problem by normalizing the data relative to the mean. First, we use a matrix Y to store the data from previous ratings, where the ith row of Y is the ratings for the ith movie and the jth column corresponds to the ratings for the jth user.
+![1505752065993](images/Week 9/1505752065993.png)
+
+*Example: new user regularization of $\theta$*
+
+![1505752138912](images/Week 9/1505752138912.png)
+
+**Solution**
+
+We rectify this problem by *normalizing the data relative to the mean*. First, we use a matrix Y to store the data from previous ratings, where the ith row of $Y$ is the ratings for the $ith$ movie and the $jth$ column corresponds to the ratings for the $jth$ user.
 
 We can now define a vector
 
@@ -363,15 +396,15 @@ $$
 $$
 Which is effectively the mean of the previous ratings for the ith movie (where only movies that have been watched by users are counted). We now can normalize the data by subtracting u, the mean rating, from the actual ratings for each user (column in matrix Y):
 
-As an example, consider the following matrix Y and mean ratings μ:
+**As an example**, consider the following matrix Y and mean ratings $μ$:
 
 $$
 Y = 
 \begin{bmatrix}
-    5 & 5 & 0 & 0  \newline
-    4 & ? & ? & 0  \newline
-    0 & 0 & 5 & 4 \newline
-    0 & 0 & 5 & 0 \newline
+    5 & 5 & 0 & 0 & ?  \newline
+    4 & ? & ? & 0  & ? \newline
+    0 & 0 & 5 & 4 & ?\newline
+    0 & 0 & 5 & 0 & ?\newline
 \end{bmatrix}, \quad
  \mu = 
 \begin{bmatrix}
@@ -386,15 +419,25 @@ The resulting Y′ vector is:
 $$
 Y' =
 \begin{bmatrix}
-  2.5    & 2.5   & -2.5 & -2.5 \newline
-  2      & ?     & ?    & -2 \newline
-  -.2.25 & -2.25 & 3.75 & 1.25 \newline
-  -1.25  & -1.25 & 3.75 & -1.25
+  2.5    & 2.5   & -2.5 & -2.5 & ? \newline
+  2      & ?     & ?    & -2 & ? \newline
+  -.2.25 & -2.25 & 3.75 & 1.25  & ?\newline
+  -1.25  & -1.25 & 3.75 & -1.25 & ?
 \end{bmatrix}
 $$
 Now we must slightly modify the linear regression prediction to include the mean normalization term:
-
+(For user $j$, on movie $i$ predict:)
 $$
 (\theta^{(j)})^T x^{(i)} + \mu_i
 $$
-Now, for a new user, the initial predicted values will be equal to the μ term instead of simply being initialized to zero, which is more accurate.
+Now, for a new user, the initial predicted values will be equal to the $μ$ **term** instead of simply being initialized to zero, which is more accurate.
+
+**Example (cont.)**
+
+![1505752622020](images/Week 9/1505752622020.png)
+
+Our normalization term still goes to $0$ but we have that new $\mu$ term.
+
+![1505752669655](images/Week 9/1505752669655.png)
+
+**NOTE:** The same idea can be applied to movies with no ratings.
