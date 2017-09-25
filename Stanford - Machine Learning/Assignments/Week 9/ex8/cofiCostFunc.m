@@ -38,25 +38,26 @@ Theta_grad = zeros(size(Theta));
 %                 partial derivatives w.r.t. to each element of X
 %        Theta_grad - num_users x num_features matrix, containing the 
 %                     partial derivatives w.r.t. to each element of Theta
-%
 
 
+% vectorize form to find the cost
 
+difference = (X*Theta'-Y).^2;
 
+regularization_cost_term = (lambda/2)*(sum(sum(Theta.^2)) + sum(sum(X.^2)));
 
-
-
-
-
-
-
-
-
-
-
+J = 1/2*sum(sum(difference.*R)) + regularization_cost_term;
 
 % =============================================================
 
+% Vectorised Form
+X_grad = (X*Theta'-Y).*R*Theta + lambda*X;
+
+Theta_grad = ((X*Theta'-Y).*R)'*X + lambda*Theta;
+
 grad = [X_grad(:); Theta_grad(:)];
+
+
+
 
 end

@@ -6,33 +6,35 @@ typora-copy-images-to: images\Week 9
 
 # Problem Motivation
 
-Just like in other learning problems, we are given a dataset x(1),x(2),…,x(m).
+Just like in other learning problems, we are given a dataset $x(1),x(2),…,x(m)$.
 
 We are then given a new example, xtest, and we want to know whether this new example is abnormal/anomalous.
 
-We define a "model" p(x) that tells us the probability the example is not anomalous. We also use a threshold ϵ (epsilon) as a dividing line so we can say which examples are anomalous and which are not.
+We define a "model" $p(x)$ that tells us the probability the example is not anomalous. We also use a threshold $ϵ$ (epsilon) as a dividing line so we can say which examples are anomalous and which are not.
 
 A very common application of anomaly detection is detecting fraud:
 
-- x(i)= features of user i's activities
-- Model p(x) from the data.
+- $x(i)=$ features of user i's activities
+- Model $p(x)$ from the data.
 - Identify unusual users by checking which have p(x)<ϵ.
 
 If our anomaly detector is flagging **too many** anomalous examples, then we need to **decrease** our threshold ϵ
 
 # Gaussian Distribution
 
-The Gaussian Distribution is a familiar bell-shaped curve that can be described by a function N(μ,σ2)
+The Gaussian Distribution is a familiar bell-shaped curve that can be described by a function $N(μ,σ^2)$
 
-Let x∈ℝ. If the probability distribution of x is Gaussian with mean μ, variance σ2, then:
+Let $x∈ℝ$. If the probability distribution of x is Gaussian with mean μ, variance $σ^2$, then:
 
 $x \sim \mathcal{N}(\mu, \sigma^2)$
 
-The little ∼ or 'tilde' can be read as "distributed as."
+***Concepts:*** 
 
-The Gaussian Distribution is parameterized by a mean and a variance.
+- The little ∼ or 'tilde' can be read as "distributed as."
+- The Gaussian Distribution is parameterized by a mean and a variance.
 
-Mu, or μ, describes the center of the curve, called the mean. The width of the curve is described by sigma, or σ, called the standard deviation.
+- Mu, or $μ$, describes the center of the curve, called the **mean**. The width of the curve is described by sigma, or $σ$, called the **standard deviation**.
+
 
 The full function is as follows:
 $$
@@ -42,7 +44,7 @@ We can estimate the parameter μ from a given dataset by simply taking the avera
 $$
 \mu = \dfrac{1}{m}\displaystyle \sum_{i=1}^m x^{(i)}
 $$
-We can estimate the other parameter, σ2, with our familiar squared error formula:
+We can estimate the other parameter, $σ^2$, with our familiar squared error formula:
 $$
 \sigma^2 = \dfrac{1}{m}\displaystyle \sum_{i=1}^m(x^{(i)} - \mu)^2
 $$
@@ -57,7 +59,7 @@ In statistics, this is called an "independence assumption" on the values of the 
 
 More compactly, the above expression can be written as follows: **(Known as the problem of *Density Estimation*)**
 $$
-= \displaystyle \prod^n_{j=1} p(x_j;\mu_j,\sigma_j^2)
+p(x)= \displaystyle \prod^n_{j=1} p(x_j;\mu_j,\sigma_j^2)
 $$
 **The algorithm**
 
@@ -75,9 +77,9 @@ $$
 
 ​	$p(x) = \displaystyle \prod^n_{j=1} p(x_j;\mu_j,\sigma_j^2) = \prod\limits^n_{j=1} \dfrac{1}{\sqrt{2\pi}\sigma_j}exp(-\dfrac{(x_j - \mu_j)^2}{2\sigma^2_j})$
 
-​	Anomaly if $p(x)<ϵ$
+***<u>Anomaly if $p(x)<ϵ$</u>***
 
-A vectorized version of the calculation for μ is $\mu = \dfrac{1}{m}\displaystyle \sum_{i=1}^m x^{(i)}$. You can vectorize $σ^2$ similarly.
+A vectorized version of the calculation for $μ$ is $\mu = \dfrac{1}{m}\displaystyle \sum_{i=1}^m x^{(i)}$. You can vectorize $σ^2$ similarly.
 
 ## Example
 
@@ -101,7 +103,7 @@ We then get the following results:
 
 ![1504463284589](images/Week 9/1504463284589.png)
 
-i.e. $x^1$ has a high probability of not being an anomaly. While $x^2$ has a high anomaly of being an anomaly. 
+i.e. $x^{(1)}$ has a high probability of not being an anomaly. While $x^{(2)}$ has a high probability of being an anomaly. 
 
 This can be interpreted as the following:
 
@@ -117,7 +119,10 @@ Similarly, for the following; everything in the shaded area can be though of as 
 
 To evaluate our learning algorithm, we take some labeled data, categorized into anomalous and non-anomalous examples.
 
-**Convention:** **( $y = 0$ if normal, $y = 1$ if anomalous).**
+**Convention:**
+
+- **$y = 0$ if normal** 
+- **$y = 1$ if anomalous**
 
 Among that data, take a large proportion of **good**, ***non-anomalous data*** for the training set on which to train $p(x)$.
 
@@ -126,7 +131,7 @@ Then, take a smaller proportion of mixed anomalous and non-anomalous examples (y
 **For Example:**
 
 1. We may have a set where 0.2% of the data is anomalous. 
-2. We take 60% of those examples, all of which are good (y=0) for the **training set.** 
+2. We take 60% of those examples, all of which are good ($y=0$) for the **training set.** 
 3. We then take 20% of the examples for the **cross-validation set** (with 0.1% of the anomalous examples) 
 4. and another 20% from the **test set** (with another 0.1% of the anomalous).
 
@@ -135,7 +140,7 @@ In other words, we split the data **60/20/20 *training/CV/tes*t** and then *spli
 **Algorithm evaluation:**
 
 Fit model $p(x)$ on training set ${x^{(1)},…,x^{(m)}}$
-On a cross validation/test example x, predict:
+On a cross validation/test example $x$, predict:
 
 ​	If $p(x) < ϵ$ (**anomaly**), then $y=1$
 
@@ -155,7 +160,7 @@ In the last section we used labeled data to test our model and find optimal para
 
 **Use anomaly detection when...**
 
-- We have a very small number of positive examples (y=1 ... 0-20 examples is common) and a large number of negative (y=0) examples.
+- We have a very small number of positive examples ($y=1$ ... 0-20 examples is common) and a large number of negative (y=0) examples.
 - We have many different "types" of anomalies and it is hard for any algorithm to learn from positive examples what the anomalies look like; *future anomalies* may look nothing like any of the anomalous examples we've seen so far.
 
 **Use supervised learning when...**
