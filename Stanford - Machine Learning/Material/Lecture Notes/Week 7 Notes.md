@@ -222,6 +222,8 @@ If $\theta_0=0$, then all our decision boundaries will intersect (0,0). If $\the
 
 **Kernels** allow us to make complex, non-linear classifiers using Support Vector Machines.
 
+**Some intuition:** The kernal changes our topological space to create a linearly separable space. 
+
 Given x, compute new feature depending on proximity to landmarks $l(1), l(2), l(3)$.
 
 To do this, we find the "similarity" of $x$ and some landmark $l^{(i)}$:
@@ -249,8 +251,10 @@ In other words, if x and the landmark are close, then the similarity will be clo
 
 Each landmark gives us the features in our hypothesis:
 $$
-\begin{align*}l^{(1)} \rightarrow f_1 \newline l^{(2)} \rightarrow f_2 \newline l^{(3)} \rightarrow f_3 \newline\dots \newline h_\theta(x) = \theta_1f_1 + \theta_2f_2 + \theta_3f_3 + \dots\end{align*}
+\begin{align*}l^{(1)} \rightarrow f_1 \newline l^{(2)} \rightarrow f_2 \newline l^{(3)} \rightarrow f_3 \newline\dots \newline h_\Theta(x) = \Theta_1f_1 + \Theta_2f_2 + \Theta_3f_3 + \dots\end{align*}
 $$
+
+
 ### $σ^2$ parameter 
 
 $\sigma$ can be modified to increase or decrease the **drop-off** of our feature $f_i$. Combined with looking at the values inside $\theta$ we can choose these landmarks to get the general shape of the decision boundary.
@@ -291,8 +295,10 @@ $$
 
 Now to get the parameters $\theta$ we can use the SVM minimization algorithm but with $f^{(i)}$ substituted in for $x^{(i)}$:
 $$
-\min_{\Theta} C \sum_{i=1}^m y^{(i)}\text{cost}_1(\Theta^Tf^{(i)}) + (1 - y^{(i)})\text{cost}_0(\theta^Tf^{(i)}) + \dfrac{1}{2}\sum_{j=1}^n \theta^2_j
+\min_{\Theta} C \sum_{i=1}^m y^{(i)}\text{cost}_1(\Theta^Tf^{(i)}) + (1 - y^{(i)})\text{cost}_0(\Theta^Tf^{(i)}) + \dfrac{1}{2}\sum_{j=1}^n \Theta^2_j
 $$
+
+
 Predictions:
 
 * Predict $y=1$ if $\theta^Tf\geq0$
