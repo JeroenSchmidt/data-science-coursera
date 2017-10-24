@@ -26,6 +26,10 @@ A computer program is said to *learn* from *Experience* $E$ with some *Task* $T$
 
 ## Supervised Learning
 
+In supervised learning, we are given a data set and already know what our correct output should look like, having the idea that there is a relationship between the input and the output.
+
+Supervised learning problems are categorized into "regression" and "classification" problems. In a regression problem, we are trying to predict results within a continuous output, meaning that we are trying to map input variables to some continuous function. In a classification problem, we are instead trying to predict results in a discrete output. In other words, we are trying to map input variables into discrete categories. Here is a description on Math is Fun on Continuous and Discrete Data.
+
 ##### ***Definition:*** Regression Problem
 
  Predict results within a continuous output
@@ -230,11 +234,7 @@ $$
 
 ##### Gradient Term
 
-Regardless of the slope's sign for $\frac{d}{d\theta_1} J(\theta_1)$, $\theta_1$ eventually converges to its minimum value. The following graph shows that when the slope is negative, the value of $θ_1$ increases and when it is positive, the value of $θ_1$ decreases.
-
-![img](https://d3c33hcgiwev3.cloudfront.net/imageAssetProxy.v1/SMSIxKGUEeav5QpTGIv-Pg_ad3404010579ac16068105cfdc8e950a_Screenshot-2016-11-03-00.05.06.png?expiry=1496707200000&hmac=kLswX4NWKg4khmnD6F4m2LuBJ_wKDfOo8Lw1kmcPUs0)
-
-##### Learning Rate
+Regardless of the slope's sign for $\frac{d}{d\theta_1} J(\theta_1)$, $\theta_1$ eventually converges to its minimum value. The following graph shows that when the slope is negative, the value of $θ_1$ increases and when it is positive, the value of $θ_1$ decreases.![stuff](Images/Week1/SMSIxKGUEeav5QpTGIv-Pg_ad3404010579ac16068105cfdc8e950a_Screenshot-2016-11-03-00.05.06.png)
 
 We should adjust our parameter α to ensure that the gradient descent algorithm converges in a reasonable time
 

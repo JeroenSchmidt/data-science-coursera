@@ -8,6 +8,32 @@ typora-copy-images-to: images\Week 4
 
 # ML:Neural Networks: Representation
 
+## Overview
+
+Addresses the problem when trying to build non-linear classification . 
+
+With logistic regression we can build new features by considering non-linear terms. For example if we have 100 features, we can then build 5000 by going to the 2nd order polynomial.  
+
+- 2nd order polynomial features: asymptotically the number of terms grows by $O(n^2/2)$
+- 2nd order polynomial features: asymptotically the number of terms grows by $O(n^3/2)$
+
+This has a few problems:
+
+- It can cause over fit of the training set
+- It gets computationally expensive 
+
+**Why we need non-linear classification**
+
+Example: identifying cars from images
+
+Using 50x50 pixel images (2500 pixels) -> features $n=2500$ and $n=7500$ if *RGB*
+
+We will then have 3 million ($2500^2/2$) **features** if we consider quadratic features. 
+
+*Take away:* its not feasible to consider all these features and of higher dimension 
+
+**Solution:** Neural Networks 
+
 # Non-linear Hypotheses
 
 Performing linear regression with a complex set of data with many features is very unwieldy. Say you wanted to create a hypothesis from three (3) features that included all the quadratic terms:
@@ -22,13 +48,15 @@ In this case we are taking all *two-element combinations of three features*: $\f
 
 For 100 features, if we wanted to make them quadratic we would get $\frac{(100+2−1)!}{(2⋅(100−1)!)}=5050$ resulting new features.
 
-We can approximate the growth of the number of new features we get with all quadratic terms with $O(n^2/2)$. And if you wanted to include all cubic terms in your hypothesis, the features would grow asymptotically at $O(n^3)$. These are very steep growths, so as the number of our features increase, the number of quadratic or cubic features increase very rapidly and becomes quickly impractical.
+We can approximate the growth of the number of new features we get with all quadratic terms with $O(n^2/2)$. 
+
+If you wanted to include all cubic terms in your hypothesis, the features would grow asymptotically at $O(n^3)$. These are very steep growths, so as the number of our features increase, the number of quadratic or cubic features increase very rapidly and becomes quickly impractical.
 
 **Example**: let our training set be a collection of $50$ x $50$ pixel black-and-white photographs, and our goal will be to classify which ones are photos of cars. Our feature set size is then $n = 2500$ if we compare every pair of pixels.
 
 Now let's say we need to make a quadratic hypothesis function. With quadratic features, our growth is $O(n^2/2)$. So our total features will be about $2500^2/2=3125000$, which is very impractical.
 
-Neural networks offers an alternate way to perform machine learning when we have complex hypotheses with many features.
+***Neural networks offers an alternate way to perform machine learning when we have complex hypotheses with many features.***
 # Neurons and the Brain
 
 Neural networks are limited imitations of how our own brains work. They've had a big recent resurgence because of advances in computer hardware.
@@ -37,79 +65,145 @@ There is evidence that the brain uses only ***one "learning algorithm"*** for al
 
 This principle is called "neuroplasticity" and has many examples and experimental evidence.
 
-# Model Representation I
-
-Let's examine how we will represent a hypothesis function using neural networks.
+![1498659333428](Images/Week 4/1498659333428.png)
 
 At a very simple level, neurons are basically computational units that take input (**dendrites**) as electrical input (called "spikes") that are channeled to outputs (**axons**).
 
-In our model, our dendrites are like the input features $x_1⋯x_n$, and the output is the result of our hypothesis function:
+1. Dendrite - input wires
+2. Computation in cell body 
+3. Axon  - output coile  
 
-In this model our $x_0$ input node is sometimes called the **"*bias unit."*** It is always equal to $1$.
+### Artificial Neuron model: Logistic Unit
 
-In neural networks, we use the same logistic function as in classification: $$\frac{1}{1+e^{-\theta^Tx}}$$. 
+**Single Neuron**
 
-In neural networks however we sometimes call it a sigmoid (logistic) **activation** function. 
+The following is a representation of a *single neuron* 
 
-Our "theta" parameters are sometimes instead called **"weights"** in the neural networks model.
+![1498659513706](Images/Week 4/1498659513706.png)
+
+Where the *hypothesis function* 
+$$
+h_\theta=\frac{1}{1+e^{-\theta^Tx}}
+$$
+In our model, our dendrites are like the input features $x_1⋯x_n$:
+$$
+x = \begin{bmatrix}x_0 \newline x_1 \newline x_2 \newline x_3 \newline \end{bmatrix}
+$$
+and our $\theta$ <u>parameters</u> **also called** ***Weights***
+$$
+\theta = \begin{bmatrix}\theta_0 \newline \theta_1 \newline \theta_2 \newline \theta_3 \newline \end{bmatrix}
+$$
+Recall that $x_0=1$; so it is sometimes omitted from diagrams. $x_0$ is also called the ***bias unit***
+
+![1498659877489](Images/Week 4/1498659877489.png)
+
+The <u>sigmoid (logistic function)</u> is also called the ***activation function***
+$$
+\frac{1}{1+e^{-\theta^Tx}}
+$$
+
+# Model Representation
+
+Let's examine how we will represent a hypothesis function using neural networks.
 
 Visually, a simplistic representation looks like:
-$$
-\begin{bmatrix}x_0 \newline x_1 \newline x_2 \newline \end{bmatrix}\rightarrow\begin{bmatrix}\ \ \ \newline \end{bmatrix}\rightarrow h_\theta(x)
-$$
+
+![1498660118631](Images/Week 4/1498660118631.png)
+
 Our input nodes (layer 1) go into another node (layer 2), and are output as the hypothesis function.
 
-The first layer is called the "input layer" and the final layer the "output layer," which gives the final value computed on the hypothesis.
+##### Terminology:
 
-We can have intermediate layers of nodes between the input and output layers called the "hidden layer."
+- Layer 1: Input layer
+- Layer 2: Hidden layer
+  - layer that isnt an input/output layer
+  - the idea is that the input/output layers we can observe but the layers between we cant exactly see what happens
+- Layer 3: Output layer
 
-We label these intermediate or "hidden" layer nodes $a^2_0⋯a^2_n$ and call them "activation units."
-$$
-\begin{align*}& a_i^{(j)} = \text{"activation" of unit $i$ in layer $j$} \newline& \Theta^{(j)} = \text{matrix of weights controlling function mapping from layer $j$ to layer $j+1$}\end{align*}
-$$
-If we had one hidden layer, it would look visually something like:
-$$
-\begin{bmatrix}x_0 \newline x_1 \newline x_2 \newline x_3\end{bmatrix}\rightarrow\begin{bmatrix}a_1^{(2)} \newline a_2^{(2)} \newline a_3^{(2)} \newline \end{bmatrix}\rightarrow h_\theta(x)
-$$
-The values for each of the "activation" nodes is obtained as follows:
+##### Notation
+
+- $a_i^{(j)}$ = "activation" of unit $i$ in layer $j$ | **activation node**
+  - *"activation"* -> value that is computed by and is output by a specific neuron
+- $\Theta^{(j)}$ = **matrix of weights** controlling function mapping from layer $j$ to layer $j+1$
+
+##### Method
+
+This process to compute $h$ in the next two sections is also called *forward propagation* - we start with the activation of the input units and forward propagate it to the hidden layer etc. 
+
+##### Node representation
+
+The values for each of the "activation" nodes in layer 2 and 3 is obtained as follows:
 $$
 \begin{align*}
-a_1^{(2)} = g(\Theta_{10}^{(1)}x_0 + \Theta_{11}^{(1)}x_1 + \Theta_{12}^{(1)}x_2 + \Theta_{13}^{(1)}x_3) \newline
-a_2^{(2)} = g(\Theta_{20}^{(1)}x_0 + \Theta_{21}^{(1)}x_1 + \Theta_{22}^{(1)}x_2 + \Theta_{23}^{(1)}x_3) \newline
-a_3^{(2)} = g(\Theta_{30}^{(1)}x_0 + \Theta_{31}^{(1)}x_1 + \Theta_{32}^{(1)}x_2 + \Theta_{33}^{(1)}x_3) \newline
-h_\Theta(x) = a_1^{(3)} = g(\Theta_{10}^{(2)}a_0^{(2)} + \Theta_{11}^{(2)}a_1^{(2)} + \Theta_{12}^{(2)}a_2^{(2)} + \Theta_{13}^{(2)}a_3^{(2)}) \newline
+a_1^{(2)} = g(\Theta_{1,0}^{(1)}x_0 + \Theta_{1,1}^{(1)}x_1 + \Theta_{1,2}^{(1)}x_2 + \Theta_{1,3}^{(1)}x_3) \newline
+a_2^{(2)} = g(\Theta_{2,0}^{(1)}x_0 + \Theta_{2,1}^{(1)}x_1 + \Theta_{2,2}^{(1)}x_2 + \Theta_{2,3}^{(1)}x_3) \newline
+a_3^{(2)} = g(\Theta_{3,0}^{(1)}x_0 + \Theta_{3,1}^{(1)}x_1 + \Theta_{3,2}^{(1)}x_2 + \Theta_{3,3}^{(1)}x_3) \newline
+h_\Theta(x) = a_1^{(3)} = g(\Theta_{1,0}^{(2)}a_0^{(2)} + \Theta_{1,1}^{(2)}a_1^{(2)} + \Theta_{1,2}^{(2)}a_2^{(2)} + \Theta_{1,3}^{(2)}a_3^{(2)}) \newline
 \end{align*}
 $$
-This is saying that we compute our activation nodes by using a 3×4 matrix of parameters. We apply each row of the parameters to our inputs to obtain the value for one activation node. Our hypothesis output is the logistic function applied to the sum of the values of our activation nodes, which have been multiplied by yet another parameter matrix $Θ^{(2)}$ containing the weights for our second layer of nodes.
+In this case $\Theta^1\in R^{3\times4}$
+
+We apply each row of the parameters to our inputs to obtain the value for one activation node. Our hypothesis output is the logistic function applied to the sum of the values of our activation nodes, which have been multiplied by yet another parameter matrix $Θ^{(2)}$ containing the weights for our second layer of nodes.
 
 Each layer gets its own matrix of weights, $Θ^{(j)}$.
 
-#### **The dimensions of these matrices of weights is determined as follows:**
+##### Dimension of weight matrix
 
-$\text{If network has } s_j \text{ units in layer } j \text{ and } s_{j+1} \text{units in layer } j+1\text{, then }Θ^{(j)} \text{will be of dimension } s_{j+1}×(s_j+1)$
+$\text{If network has } s_j \text{units in layer } j \text{and } s_{j+1} \text{units in layer } j+1\text{, then }Θ^{(j)} \text{will be of dimension } s_{j+1}×(s_j+1)$
 
-The +1 comes from the addition in $Θ^{(j)}$ of the "bias nodes," $x_0$ and $Θ^{(j)}_0$. In other words the output nodes will not include the bias nodes while the inputs will.
+###### *Example:*
 
-***Example:*** layer 1 has 2 input nodes and layer 2 has 4 activation nodes. Dimension of $Θ^{(1)}$ is going to be $4×3$ where $s_j=2$ and $s_{j+1=4}$, so $s_{j+1}×(s_j+1)=4×3$.
+Example: layer 1 has 2 input nodes and layer 2 has 4 activation nodes. Dimension of $Θ^{(1)}$ is going to be $4×3$ where $s_j=2$ and $s_j+1=4$, so $s_j+1×(sj+1)=4×3$.
 
-# Model Representation II
+==NOTE== The hypothesis function for Neural Networks are parameterized by $\Theta$
 
-In this section we'll do a **vectorized implementation** of the above functions. We're going to define a new variable $z^{(j)}_k$ that encompasses the parameters inside our $g$ function. In our previous example if we replaced the variable z for all the parameters we would get:
+#### Neural Network Vectorized Implantation - forward propagation
+
+n this section we'll do a **vectorized implementation** of the above functions. We're going to define a new variable $z^{(j)}_k$ that encompasses the parameters inside our $g$ function.
+
+$z^{(j)}_k =   \Theta_{k,0}^{(j-1)}x_0 + \Theta_{k,1}^{(j-1)}x_1 + \cdots + \Theta_{k,n}^{(j-1)}x_n$
+
+our layer 1 nodes become:
 $$
 \begin{align*}a_1^{(2)} = g(z_1^{(2)}) \newline a_2^{(2)} = g(z_2^{(2)}) \newline a_3^{(2)} = g(z_3^{(2)}) \newline \end{align*}
 $$
+we can further vectorise by:
+
+$z^{(2)} = \begin{bmatrix}z^2 \newline z^2 \newline z^2 \newline \end{bmatrix}$ and $a^{(1)}=x = \begin{bmatrix}x_0 \newline x_1 \newline x_2 \newline x_3 \newline \end{bmatrix}$
+
+so then 
+$$
+z^{(2)}=\Theta^{(1)}x=\Theta^{(1)}a^{(1)} \\
+a^{(2)}=g(z^{(2)})
+$$
+==NOTE== the sigmoid function $g$ is applied element wise onto $z^{(2)}$ 
+in the above example: $a^{(2)}\in R^3$ and $z^{(2)} \in R^3$
+
+Finally to compute the hypothesis value: 
+$$
+z^3=\Theta^2a^2 \\
+h_\Theta(x) = a^3=g(z^3)
+$$
+
+#### Abstraction:
+
 In other words, for layer j=2 and node k, the variable z will be:
 $$
+
 z_k^{(2)} = \Theta_{k,0}^{(1)}x_0 + \Theta_{k,1}^{(1)}x_1 + \cdots + \Theta_{k,n}^{(1)}x_n
+
 $$
 The vector representation of $x$ and $z^j$ is:
 $$
+
 \begin{align*}x = \begin{bmatrix}x_0 \newline x_1 \newline\cdots \newline x_n\end{bmatrix} & \text{ , }z^{(j)} = \begin{bmatrix}z_1^{(j)} \newline z_2^{(j)} \newline\cdots \newline z_n^{(j)}\end{bmatrix}\end{align*}
-$$
-Setting $x=a^{(1)}$ (for notation consistancy we set the inout x to be layer $a^{(1)}$), we can rewrite the equation as:
 
 $$
+Setting $x=a^{(1)}$ (for notation consistancy we set the inout x to be layer $a^{(1)}$), we can rewrite the equation as:
+$$
+
 z^{(j)} = \Theta^{(j-1)}a^{(j-1)}
+
 $$
 We are multiplying our matrix $Θ^{(j−1)}$ with dimensions $s_j×(n+1)$ (where $s_j$ is the number of our activation nodes) by our vector $a^{(j−1)}$ with height $(n+1)$. This gives us our vector $z^{(j)}$ with height $s_j$.
 
@@ -137,9 +231,20 @@ Notice that in this **last step**, between layer $j$ and layer $j+1$, we are doi
 
 ***Adding all these intermediate layers in neural networks allows us to more elegantly produce interesting and more complex non-linear hypotheses.***
 
-#### Method name:
+**Summary**
+$$
+z^{(j)} = \Theta^{(j-1)}a^{(j-1)}\\
+a^{(j)}=g(z^{(j)})\\
+h_Θ(x)=a^{(j+1)}=g(z^{(j+1)})
+$$
 
-This process to compute $h$ in the next two sections is also called ***forward propagation*** - we start with the activation of the input units and forward propagate it to the hidden layer etc. 
+#### Architecture
+
+- The way the NN is laid out 
+
+*Example:*
+
+![1498663305967](Images/Week 4/1498663305967.png)
 
 # Intuition 
 

@@ -6,9 +6,9 @@ typora-copy-images-to: Images\Week3
 
 [TOC]
 
-## Classification & Representation
+# Classification & Representation
 
-##### ***Terminology*** - for binary classification
+### ***Terminology*** - for binary classification
 
 1) $y \in (0,1)$ 
 
@@ -23,7 +23,7 @@ typora-copy-images-to: Images\Week3
 
  
 
-##### ***Example*** - Context
+### ***Example*** - Context
 
 Using <u>Linear Regression</u> for classification problems
 
@@ -43,9 +43,9 @@ Notice how our threshold of $0.5$ moves as a result of the outlier.
 
 The hypothesis $h_\theta(x)$ can be also be > 1 or < 0 even if the labels are only meant to be y = 1,0 
 
-## Logistic Regression Model
+# Logistic Regression Model
 
-### Hypothesis Function
+## Hypothesis Function
 
 We want $0\leq h_\theta(x)\leq 1$
 
@@ -59,17 +59,26 @@ g(z) = \frac{1}{1+e^{-z}}
 $$
 ![1WFqZHntEead-BJkoDOYOw_2413fbec8ff9fa1f19aaf78265b8a33b_Logistic_function](Images/Week3/1WFqZHntEead-BJkoDOYOw_2413fbec8ff9fa1f19aaf78265b8a33b_Logistic_function.png)
 
-##### ***Equation*** - Logistic Regression Hypothesis
+### ***Equation*** - Logistic Regression Hypothesis
 
 $$
 h_\theta(x) = \frac{1}{1+e^{-\theta^Tx}}
 $$
 
-#### Interpretation
+## Interpretation
 
-$h_\theta(x) = $ estimated probability that $y=1$ on input x
+The function g(z), shown here, maps any real number to the (0, 1) interval, making it useful for transforming an arbitrary-valued function into a function better suited for classification. Try playing with interactive plot of sigmoid function : ([https://www.desmos.com/calculator/bgontvxotm](https://www.desmos.com/calculator/bgontvxotm)).
 
-*Expression:*
+We start with our old hypothesis (linear regression), except that we want to restrict the range to 0 and 1. This is accomplished by plugging $θ^Tx$ into the Logistic Function.
+
+$h_θ$ will give us the **probability** that our output is 1. For example, $h_θ(x)=0.7$ gives us the probability of 70% that our output is 1. i.e $h_\theta(x) = $ estimated probability that $y=1$ on input x
+
+$$
+\begin{align*}& h_\theta(x) = P(y=1 | x ; \theta) = 1 - P(y=0 | x ; \theta) \newline& P(y = 0 | x;\theta) + P(y = 1 | x ; \theta) = 1\end{align*}
+$$
+Our probability that our prediction is 0 is just the complement of our probability that it is 1 (e.g. if probability that it is 1 is 70%, then the probability that it is 0 is 30%).
+
+*Expression Example:*
 
 > Probability that $y=1$, given $x$, parametrized by $\theta$
 >
@@ -82,7 +91,7 @@ i.e.
 * The summation is equal to 1 
   * $P(y=1| x;\theta) + P(y=0| x;\theta) = 1$
 
-### Decision Boundary
+## Decision Boundary
 
 When is $y=1$ w.r.t $\theta^Tx$ ? 
 
@@ -98,8 +107,20 @@ $$
 h_\theta(x)=g(z) < 0.5\\
 \text{when }z = \theta^Tx < 0
 $$
+**Remember:**
+$$
+\begin{align*}z=0,  e^{0}=1 \Rightarrow  g(z)=1/2\newline z \to \infty, e^{-\infty} \to 0 \Rightarrow g(z)=1 \newline z \to -\infty, e^{\infty}\to \infty \Rightarrow g(z)=0 \end{align*}
+$$
+So if our input to g is $θ^TX$, then that means:
 
-##### ***Example:*** linear boundary
+From these statements we can now say:
+$$
+\begin{align*}& \theta^T x \geq 0 \Rightarrow y = 1 \newline& \theta^T x < 0 \Rightarrow y = 0 \newline\end{align*}
+$$
+The **decision boundary** is the line that separates the area where y = 0 and where y = 1. It is created by our hypothesis function.
+
+
+### ***Example:*** linear boundary
 
 Say we have the following data:
 
@@ -119,7 +140,7 @@ Everything to the right of the pink line is then determined to be the "red x" re
 
 ![1497255984444](Images/Week3/1497255984444.png)
 
-##### ***Term:*** Decision Boundary
+### ***Term:*** Decision Boundary
 
 > * The pink line in the above diagram 
 > * The function that separates the classification regions
@@ -148,7 +169,7 @@ Everything outside the pink circle is $y=1$
 
 with the decision boundary defined by $x_1^2+x_2^2=1$
 
-### Cost Function
+## Cost Function
 
 How do we choose our parameters $\theta$?
 
@@ -156,9 +177,9 @@ How do we choose our parameters $\theta$?
 
 ![1497258531369](Images/Week3/1497258531369.png)
 
+**Context:**
 
-
-#### Context:
+We cannot use the same cost function that we use for linear regression because the Logistic Function will cause the output to be wavy, causing many local optima. In other words, it will not be a convex function.
 
 Recall that the *cost function* for linear regression is:
 $$
@@ -177,7 +198,7 @@ This non-linearity will produce a "non-convec" cost function when put into the c
 The problem with this is that we will struggle to find the global optimal solution to the cost function.
 ==Hence== we define a cost function that will give us a convex function which is easier to optimize. 
 
-#### ***Function:*** Logistic Regression cost Function
+### ***Function:*** Logistic Regression cost Function
 
 $$
 J(\theta)=\frac{1}{m}\sum_m^{i=1} Cost(h_\theta(x^{(i)}),y^{(i)})\\
@@ -187,7 +208,7 @@ J(\theta)=\frac{1}{m}\sum_m^{i=1} Cost(h_\theta(x^{(i)}),y^{(i)})\\
   \end{cases}
 $$
 
-##### ***Intuition:*** $y=1$
+ ***Intuition:*** $y=1$
 
 Plot of $-log(h_\theta(x))$ as  $J(θ)$ vs $h_θ(x)$:
 
@@ -224,7 +245,7 @@ $$
 Cost(h_\theta(x),y)=-y\log(h_\theta(x))-(1-y)\log(1-h_\theta(x))
 $$
 
-#### ***Function:*** Logistic Regression cost Function
+### ***Function:*** Logistic Regression cost Function
 
 $$
 J(\theta) = - \frac{1}{m} \displaystyle \sum_{i=1}^m [y^{(i)}\log (h_\theta (x^{(i)})) + (1 - y^{(i)})\log (1 - h_\theta(x^{(i)}))]
@@ -235,18 +256,18 @@ $$
 * The above cost function is convex
 * This cost function can be derived from the principle of *maximum likelihood estimation* 
 
-### Fitting Parameters - Gradient Descent 
+## Fitting Parameters - Gradient Descent 
 
-#### ***Algorithm*** Gradient Descent
+## ***Algorithm*** Gradient Descent
 
 Minimizing $J(\theta)$
 $$
 \begin{align*} & Repeat \; \lbrace \newline & \; \theta_j := \theta_j - \frac{\alpha}{m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)} \newline & \rbrace \end{align*}
 $$
 
- #### Vectorized Implementation 
+ ## Vectorized Implementation 
 
-##### ***Vectorized*** - Cost Function
+### ***Vectorized*** - Cost Function
 
 $$
 h = g(X\theta)\\
@@ -254,7 +275,7 @@ g(z) = \frac{1}{1+e^{-z}} \\
 J(\theta) = \frac{1}{m} \cdot \left(-y^{T}\log(h)-(1-y)^{T}\log(1-h)\right)
 $$
 
-##### ***Vectorized*** - Updating of Gradient Descent
+### ***Vectorized*** - Updating of Gradient Descent
 
 $$
 \theta := \theta - \alpha\frac{1}{m}\sum_{i=1}^{m}[(h_\theta(x^{(i)}) - y^{(i)}) \cdot x^{(i)}]
@@ -265,7 +286,7 @@ $$
 \theta := \theta - \frac{\alpha}{m} X^{T} (g(X \theta ) - \vec{y})
 $$
 
-### Advanced Optimization 
+## Advanced Optimization 
 
 Example of more advanced optimization algorithms
 
@@ -278,7 +299,7 @@ Example of more advanced optimization algorithms
 | No need to manually pick $\alpha$  | More Complex  |
 | Often faster then gradient descent |               |
 
-##### ***Example***
+### ***Example***
 
 ![1497346884131](Images/Week3/1497346884131.png)
 
@@ -301,7 +322,7 @@ initialTheta = zeros(2,1);
 
 ==NOTE== `initialTheta` $\in R^d$ where $d \geq 2$
 
-##### Use with logistic regression 
+### Use with logistic regression 
 
 ```octave
 function [jVal, gradient] = costFunction(theta)
@@ -310,13 +331,13 @@ function [jVal, gradient] = costFunction(theta)
 end
 ```
 
-## Multiclass Classification 
+# Multiclass Classification 
 
 Given a data set with 3 classes, left graph
 
 ![1497348129058](Images/Week3/1497348129058.png)
 
-### ***Classification:*** One-VS-All
+## ***Classification:*** One-VS-All
 
 Using *one-vs-all* classification we can separate the 3 different classes. 
 
@@ -332,7 +353,7 @@ Where:
 * $i=2$ squares
 * $i=3$ circles
 
-#### Summary
+## Summary
 
 Train a logistic regression classifier $h_\theta^{(i)}$ for each class $i$ to predict the probability that $y=i$
 
@@ -341,25 +362,25 @@ $$
 \begin{align*}& y \in \lbrace0, 1 ... n\rbrace \newline& h_\theta^{(0)}(x) = P(y = 0 | x ; \theta) \newline& h_\theta^{(1)}(x) = P(y = 1 | x ; \theta) \newline& \cdots \newline& h_\theta^{(n)}(x) = P(y = n | x ; \theta) \newline& \mathrm{prediction} = \max_i( h_\theta ^{(i)}(x) )\newline\end{align*}
 $$
 
-## Dealing with Over-fitting -> Regularization 
+# Dealing with Over-fitting -> Regularization 
 
-##### ***Definition:*** Over-Fitting
+### ***Definition:*** Over-Fitting
 
 > If we have to many features (and not enough data), the learning hypothesis may fit the training set very well $J(\theta) \approx 0$ but fail to generalize to new examples 
 >
 > i.e. It makes accurate prediction for examples in the training set, but it does not generalize well to make accurate predictions on new, preciously unseen examples
 
-##### ***Definition:*** Underfitting  /  high bias
+### ***Definition:*** Underfitting  /  high bias
 
 > When the form of our hypothesis function $h$ maps poorly to the trend of the data. It is usually caused by a function that is too simple or uses too few features.
 
-##### ***Example*** Visual Illustration
+### ***Example*** Visual Illustration
 
 ![1497353075710](Images/Week3/1497353075710.png)
 
 ![1497353125902](Images/Week3/1497353125902.png)
 
-### Addressing Overfitting
+## Addressing Overfitting
 
 * Reduce number of features
   * Manually select which features to keep
@@ -369,24 +390,22 @@ $$
   * Works well when we have a lot of features, each of which contributes a bit to predicting $y$
 
 
-
 ### Intuition behind Regularization
 
 ![1497354206494](Images/Week3/1497354206494.png)
 
 Then $\theta_3 \approx 0$ and $\theta_4 \approx 0$ -> then we get a function that resembles $\theta_0 + \theta_1x + \theta_2x^2$ 
 
-#### Core Idea 
+**Core Idea**
 
 > Small values for parameters $\theta_0,\theta_1,...\theta_n$
 >
 > * Simpler hypothesis
 > * Less prone to overfitting
 
-### Solution - Cost Function for Regularization
+## Solution - Cost Function for Regularization
 
-##### ***Cost Function:*** Regularize all parameters
-
+***Cost Function:*** Regularize all parameters
 $$
 J(\theta) = \min_\theta\ \dfrac{1}{2m}\  \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})^2 + \lambda\ \sum_{j=1}^n \theta^2_j
 $$
@@ -404,10 +423,13 @@ $$
   * The larger it is, the more the parameters will made small -> smooth out the function too much and cause under-fitting
 
 
-### Regularized *Linear Regression*
+Using the above cost function with the extra summation, we can smooth the output of our hypothesis function to reduce overfitting. If lambda is chosen to be too large, it may smooth out the function too much and cause underfitting.
 
-#### ***Algorithm:***
+## Regularized *Linear Regression*
 
+We can apply regularization to both linear regression and logistic regression. We will approach linear regression first.
+
+***Algorithm:***
 $$
 \begin{align*} & \text{Repeat}\ \lbrace \newline & \ \ \ \ \theta_0 := \theta_0 - \alpha\ \frac{1}{m}\ \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})x_0^{(i)} \newline & \ \ \ \ \theta_j := \theta_j - \alpha\ \left[ \left( \frac{1}{m}\ \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})x_j^{(i)} \right) + \frac{\lambda}{m}\theta_j \right] &\ \ \ \ \ \ \ \ \ \ j \in \lbrace 1,2...n\rbrace\newline & \rbrace \end{align*}
 $$
@@ -424,16 +446,15 @@ i.e its exactly the same as gradient descent but whe re the parameter $\theta$ i
 
 
 
-### Regularized *Normal Equation*
+## Regularized *Normal Equation*
 
-#### ***Formula:***
-
+***Formula:***
 $$
 \begin{align*}& \theta = \left( X^TX + \lambda \cdot L \right)^{-1} X^Ty \newline& \text{where}\ \ L = \begin{bmatrix} 0 & & & & \newline & 1 & & & \newline & & 1 & & \newline & & & \ddots & \newline & & & & 1 \newline\end{bmatrix}\end{align*} \\
 \text{where } L \in R^{(n+1)\times(n+1)}
 $$
 
-#### Non-Inevitability
+### Non-Inevitability
 
 Recall that the *Normal Equation* is of the form $\theta = (X^T X)^{-1}X^T y$ 
 Suppose $m \leq n$ then $X^TX$ is non-invertible/singular
@@ -445,19 +466,25 @@ $$
 \theta = \left( X^TX + \lambda \cdot L \right)^{-1} X^Ty
 $$
 
-### Regularized Logistic Regression 
+## Regularized Logistic Regression 
 
+We can regularize logistic regression in a similar way that we regularize linear regression. 
 $$
 J(\theta) = - \frac{1}{m} \sum_{i=1}^m \large[ y^{(i)}\ \log (h_\theta (x^{(i)})) + (1 - y^{(i)})\ \log (1 - h_\theta(x^{(i)}))\large] + \frac{\lambda}{2m}\sum_{j=1}^n \theta_j^2
 $$
 
-#### ***Algorithm***
+**Note Well:** The second sum, $∑^n_j=θ^2_j$ **means to explicitly exclude** the bias term, $θ_0$. I.e. the θ vector is indexed from 0 to n (holding n+1 values, $θ_0$ through $θ_n$), and this sum explicitly skips $θ_0$, by running from 1 to n, skipping 0.
 
+***Algorithm***
+
+Just like with linear regression, we will want to **separately** update $θ_0$ and the rest of the parameters because we do not want to regularize $θ_0$.
 $$
 \begin{align*} & \text{Repeat}\ \lbrace \newline & \ \ \ \ \theta_0 := \theta_0 - \alpha\ \frac{1}{m}\ \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})x_0^{(i)} \newline & \ \ \ \ \theta_j := \theta_j - \alpha\ \left[ \left( \frac{1}{m}\ \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})x_j^{(i)} \right) + \frac{\lambda}{m}\theta_j \right] &\ \ \ \ \ \ \ \ \ \ j \in \lbrace 1,2...n\rbrace\newline & \rbrace \end{align*}
 $$
 
-#### Advanced Optimization 
+This is identical to the gradient descent function presented for linear regression.
+
+## Advanced Optimization 
 
 Same as last section but with modified cost function $J$
 
