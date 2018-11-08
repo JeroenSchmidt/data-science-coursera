@@ -3,11 +3,12 @@ This repository contains all of my Coursera learning material relevant to the Da
 
 ## Coursera Material Contained Within 
 
-- Data Science Specialization 
+- *John Hopkins* Data Science Specialization 
   - Data Science Fundamentals [x]
   - R Language [x] 
   - Getting and Cleaning Data
-- Stanford Machine Learning
+- *Stanford* Machine Learning
+- *National Research University Higher School of Economics* Competitive Data Science
 
 ## Important
 
