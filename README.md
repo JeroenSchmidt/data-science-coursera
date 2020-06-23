@@ -3,11 +3,11 @@ This repository contains exercises, notebooks, projects and summaries related to
 
 ## My Certifications
 
-* [Machine Learning NanoDegree](https://confirm.udacity.com/UUGTVXD)
-* [Machine Learning (Stanford) by Andrew Ng](https://www.coursera.org/account/accomplishments/records/MFHF66KNE5GH)
-* [TensorFlow in Practice Specialisation](https://www.coursera.org/account/accomplishments/specialization/SDAQSU39GE3M)
-
-
+| Name                          | Platform                                     | Certificate| 
+| -----------------------------| ---------------------------------------- | ---------------------------------------- |
+| [Machine Learning NanoDegree](https://confirm.udacity.com/UUGTVXD)                                                    | Udacity | [link](https://github.com/JeroenSchmidt/data-science-moocs/blob/master/certificates/udacity_ml_nanodegree.pdf)|
+| [Machine Learning (Stanford) by Andrew Ng](https://www.coursera.org/account/accomplishments/records/MFHF66KNE5GH)     | Coursera | [link](https://github.com/JeroenSchmidt/data-science-moocs/blob/master/certificates/Coursera%20MFHF66KNE5GH.pdf)|
+| [TensorFlow in Practice Specialisation](https://www.coursera.org/account/accomplishments/specialization/SDAQSU39GE3M) | Coursera | [link](https://github.com/JeroenSchmidt/data-science-moocs/blob/master/certificates/Coursera%20SDAQSU39GE3M.pdf)|
 
 ## Important
 
