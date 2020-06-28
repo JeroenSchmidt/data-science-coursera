@@ -4,10 +4,10 @@
 ```python
 # Define a Callback class that stops training once accuracy reaches 97.0%
 class myCallback(tf.keras.callbacks.Callback):
-  def on_epoch_end(self, epoch, logs={}):
+    def on_epoch_end(self, epoch, logs={}):
     if(logs.get('accuracy')>0.97):
-      print("\nReached 97.0% accuracy so cancelling training!")
-      self.model.stop_training = True
+        print("\nReached 97.0% accuracy so cancelling training!")
+        self.model.stop_training = True
 ```
 
 ### Plotting Metrics
@@ -25,6 +25,14 @@ def plot_graphs(history, string):
   
 plot_graphs(history, "accuracy")
 plot_graphs(history, "loss")
+```
+
+### Fashion MNIST
+```python
+mnist = tf.keras.datasets.fashion_mnist
+
+(x_train, y_train),(x_test, y_test) = mnist.load_data()
+x_train, x_test = x_train / 255.0, x_test / 255.0
 ```
 
 --------------------
@@ -419,6 +427,22 @@ label_word_index = label_tokenizer.word_index
 label_seq = label_tokenizer.texts_to_sequences(labels)
 ```
 
+#### A note on padding and its uses for CNN and LSTM models
+[Keras Discussion](https://github.com/keras-team/keras/issues/2375)
+
+**Summary:** 
+The padding is useful when you batch your sequences. If you don't want to mask, you have several options:
+
+1. batch_size=1. You feed the sequences one by one and in this case you don't need to have them of the same length. Something like (from my memory):
+    ```python
+    for seq, label in zip(sequences, y):
+        model.train(np.array([seq]), [label])
+    ```
+2. Grouping samples by length (all sequences of length 5 together and all sequences of length 4 together)
+
+> I tried both these methods before. Batch of size 1 is indeed too slow (you don't have the batch parallel optimisation), and grouping samples is something I don't find too elegant.
+
+> So I would go for the masking.
 
 ## Week 2: Word Embeddings
 
@@ -472,7 +496,9 @@ out_m.close()
 ### IMDB Data
 ```python
 import tensorflow_datasets as tfds
+#subwords
 imdb, info = tfds.load("imdb_reviews/subwords8k", with_info=True, as_supervised=True)
+imdb, info = tfds.load("imdb_reviews", with_info=True, as_supervised=True)
 
 train_data, test_data = imdb['train'], imdb['test']
 
@@ -603,11 +629,15 @@ model.summary()
 
 ## Week 3: Sequence models
 
-> Anacdotal from Laurence: I found from training networks that jaggedness can be an indication that your model needs improvement
+> Anacdotal from Laurence (1): I found from training networks that jaggedness can be an indication that your model needs improvement
 
 > Aim for smoothness of loss & other metrics over epochs
 
+![](figures/nlp-consistancy-epochs.png)
+
+> Anacdotal from Laurence (2):
 > You tend to see more overfitting with text vs images because almost always you will have out of vocabulary words in the validation data set
+> "Remember that with text, you'll probably get a bit more overfitting than you would have done with images. Not least because you'll almost always have out of vocabulary words in the validation data set. That is words in the validation dataset that weren't present in the training, naturally leading to overfitting. These words can't be classified and, of course, you're going to have these overfitting issues, but see what you can do to avoid them."
 
 ### Using GRU
 ```python
@@ -632,6 +662,21 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
 ```
+
+#### Side note:
+**When to use GRU vs LSTM?**
+> From (stack overflow)[https://datascience.stackexchange.com/a/19617]
+
+* From my experience, GRUs train faster and perform better than LSTMs on less training data if you are doing language modeling (not sure about other tasks).
+* GRUs are simpler and thus easier to modify, for example adding new gates in case of additional input to the network. It's just less code in general.
+* LSTMs should in theory remember longer sequences than GRUs and outperform them in tasks requiring modeling long-distance relations.
+
+***Some additional papers that analyze GRUs and LSTMs.***
+
+* "Neural GPUs Learn Algorithms" (Łukasz Kaiser, Ilya Sutskever, 2015) https://arxiv.org/abs/1511.08228
+
+* "Comparative Study of CNN and RNN for Natural Language Processing" (Wenpeng Yin et al. 2017) https://arxiv.org/abs/1702.01923
+
 
 ## Week 4: Sequence models and literature (Text Generation)
 
@@ -755,6 +800,9 @@ print(seed_text)
     * Forecasts = trailing moving avg of diff. series + centered moving avg of past series
         * So we can improve these forecasts by also removing the past noise using a moving average on that.
  
+**Trailing versus centered windows**
+ > Note that when we use the trailing window when computing the moving average of present values from t minus 32, t minus one. But when we use a centered window to compute the moving average of past values from one year ago, that's t minus one year minus five days, to t minus one year plus five days. Then moving averages using centered windows can be more accurate than using trailing windows. But we can't use centered windows to smooth present values since we don't know future values. However, to smooth past values we can afford to use centered windows
+ 
 ## Week 2: Deep Neural Networks for Time Series
 
 **Creating and preparing Synthetic data using TF**
@@ -840,6 +888,7 @@ plot_series(time_valid, results)
 ```python
 model = tf.keras.models.Sequential([
     # expand dims adds another dimension
+    # this is an example, an alternative would be to use expand dims in the data prep stage
   tf.keras.layers.Lambda(lambda x: tf.expand_dims(x, axis=-1),
                       input_shape=[None]),
   tf.keras.layers.SimpleRNN(40, return_sequences=True),
@@ -855,6 +904,13 @@ model = tf.keras.models.Sequential([
 * Last layer helps us scale the predictions
     * The default activation function in the RNN layers is tan H which is the hyperbolic tangent activation. This outputs values between negative one and one. 
     * Since the time series values are in that order usually in the 10s like 40s, 50s, 60s, and 70s, then scaling up the outputs to the same ballpark can help us with learning
+    
+**Asside note:** ****Why is the output layer being mulitplyed?****
+
+* RELU activation functions are not approciapte for RNN models because of the large values they can produce
+* We are stuck using SIgmoid or TanH activation functions; thus we can make our lives easy by using a lambda function at the end of the model to scale the values correctly. 
+* Reducing the scale of the target variable will, in turn, reduce the size of the gradient used to update the weights and result in a more stable model and training process.
+* See stackoverflow https://stats.stackexchange.com/questions/444923/activation-function-between-lstm-layers
     
 ### Loss Functions
 
@@ -926,6 +982,7 @@ model = tf.keras.models.Sequential([
                       activation="relu",
                       input_shape=[None, 1]),
     #NOTE the input shape, this means we also have to edit the windowed_dataset function
+  # Bidirectional can cause further overfitting
   tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(32, return_sequences=True)),
   tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(32, return_sequences=True)),
   tf.keras.layers.Dense(1),
@@ -953,3 +1010,4 @@ rnn_forecast = rnn_forecast[split_time - window_size:-1, -1, 0]
 * Some of the problems are clearly visualize when we plot the loss against the MAE, there's a lot of noise and instability in there. 
 * One common cause for small spikes like that is a small batch size introducing further random noise. if you check out Andrea's videos and his course on optimizing for gradient descent,
     * One hint was to explore the batch size and to make sure it's appropriate for my data. So in this case it's worth experimenting with different batch sizes
+    
