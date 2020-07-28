@@ -1,6 +1,15 @@
 [submodule "Deeplearning.ai-Natural-Language-Processing-Specialization"]
-	path = Deeplearning.ai-Natural-Language-Processing-Specialization
+	path = Machine Learning/Deeplearning.ai-Natural-Language-Processing-Specialization
 	url = git@github.com:JeroenSchmidt/Deeplearning.ai-Natural-Language-Processing-Specialization.git
 [submodule "Udacity-Machine-Learning-Nano-Degree"]
-	path = Udacity-Machine-Learning-Nano-Degree
+	path = Machine Learning/Udacity-Machine-Learning-Nano-Degree
 	url = git@github.com:JeroenSchmidt/Udacity-Machine-Learning-Nano-Degree.git
+[submodule "Statistics/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers"]
+	path = Statistics/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers
+	url = git@github.com:JeroenSchmidt/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers.git
+[submodule "Statistics/Statistical Rethinking/statrethinking_winter2019"]
+	path = Statistics/Statistical Rethinking/statrethinking_winter2019
+	url = git@github.com:JeroenSchmidt/statrethinking_winter2019.git
+[submodule "Statistics/pymc3-resources"]
+	path = Statistics/pymc3-resources
+	url = git@github.com:JeroenSchmidt/pymc3-resources.git
