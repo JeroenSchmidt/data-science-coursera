@@ -1,4 +1,4 @@
-![alt text](../images/machinelearning.jpg)
+![alt text](images/machinelearning.jpg)
 
 
 # About this Course
