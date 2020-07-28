@@ -8,7 +8,7 @@ Completed content is located within the MASTER branch while work in progress and
 ## My Certifications
 
 | Name                          | Platform                                     | PDF Certificate| Certificate |
-| -----------------------------| ---------------------------------------- | ---------------------------------------- |
+| -----------------------------| ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
 | [Machine Learning NanoDegree](https://confirm.udacity.com/UUGTVXD)                                                    | Udacity | [link](https://github.com/JeroenSchmidt/data-science-moocs/blob/master/certificates/udacity_ml_nanodegree.pdf)| |
 | [Machine Learning (Stanford) by Andrew Ng](https://www.coursera.org/account/accomplishments/records/MFHF66KNE5GH)     | Coursera | [link](https://github.com/JeroenSchmidt/data-science-moocs/blob/master/certificates/Coursera%20MFHF66KNE5GH.pdf)| |
 | [TensorFlow in Practice Specialisation](https://www.coursera.org/account/accomplishments/specialization/SDAQSU39GE3M) | Coursera | [link](https://github.com/JeroenSchmidt/data-science-moocs/blob/master/certificates/Coursera%20SDAQSU39GE3M.pdf)| |
