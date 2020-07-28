@@ -10,3 +10,6 @@
 [submodule "Statistics/Statistical Rethinking/statrethinking_winter2019"]
 	path = Statistics/Statistical Rethinking/statrethinking_winter2019
 	url = git@github.com:JeroenSchmidt/statrethinking_winter2019.git
+[submodule "Statistics/pymc3-resources"]
+	path = Statistics/pymc3-resources
+	url = git@github.com:JeroenSchmidt/pymc3-resources.git
