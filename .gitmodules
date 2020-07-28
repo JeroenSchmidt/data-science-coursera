@@ -1,0 +1,3 @@
+[submodule "Deeplearning.ai-Natural-Language-Processing-Specialization"]
+	path = Deeplearning.ai-Natural-Language-Processing-Specialization
+	url = git@github.com:JeroenSchmidt/Deeplearning.ai-Natural-Language-Processing-Specialization.git
