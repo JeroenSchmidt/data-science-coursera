@@ -1,5 +1,5 @@
 [submodule "Deeplearning.ai-Natural-Language-Processing-Specialization"]
-	path = Machine Learning/Deeplearning.ai-Natural-Language-Processing-Specialization
+	path = Machine Learning/NLP - Specialisation
 	url = git@github.com:JeroenSchmidt/Deeplearning.ai-Natural-Language-Processing-Specialization.git
 [submodule "Udacity-Machine-Learning-Nano-Degree"]
 	path = Machine Learning/Udacity-Machine-Learning-Nano-Degree
